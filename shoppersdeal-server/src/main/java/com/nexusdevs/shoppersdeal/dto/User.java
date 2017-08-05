@@ -16,8 +16,8 @@ public class User {
 	private String state;
 	private String country;
 	private Boolean mailSubscription;
-	private String createTime;
-	private String updateTime;
+	private long createTime;
+	private long updateTime;
 
 	public String getId() {
 		return id;
@@ -115,19 +115,19 @@ public class User {
 		this.mailSubscription = mailSubscription;
 	}
 
-	public String getCreateTime() {
+	public long getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(String createTime) {
+	public void setCreateTime(long createTime) {
 		this.createTime = createTime;
 	}
 
-	public String getUpdateTime() {
+	public long getUpdateTime() {
 		return updateTime;
 	}
 
-	public void setUpdateTime(String updateTime) {
+	public void setUpdateTime(long updateTime) {
 		this.updateTime = updateTime;
 	}
 

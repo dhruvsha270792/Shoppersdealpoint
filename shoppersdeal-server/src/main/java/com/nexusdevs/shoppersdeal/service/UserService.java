@@ -20,6 +20,18 @@ public class UserService {
 	public JSONObject registerUser(JSONObject regUserObj) {
 		System.out.println(regUserObj.get("age"));
 		User user = JsonUtils.fromJsonObjToUser(regUserObj);
+		
+		/*User userAlreadyStatus = daoService.getUserDetail(user.getEmail());
+		if(userAlreadyStatus != null)
+			return JsonUtils.errorResponse("User Already Exists");
+		
+		user.setId(null);
+		user.setUserId(UUID.randomUUID().toString().replaceAll("-", ""));
+		user.setCreateTime(System.currentTimeMillis());
+		user.setUpdateTime(System.currentTimeMillis());
+		
+		User userRegisterStatus = daoService.createUser(user);*/
+		
 		return null;
 	}
 }

@@ -36,10 +36,4 @@ public class UserController {
 		}
 		return jsonObject.toString();
 	}
-	
-	public static void main(String[] args) {
-		UserController uc = new UserController();
-		String ucObj = "{'id':'1','name':'dhruv','age':'20','','':'','':'','':'','':'','':'','':''}";
-		uc.registerUser(ucObj);
-	}
 }

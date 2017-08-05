@@ -11,8 +11,8 @@ public class Address {
 	private String country;
 	private String zipcode;
 	private String landmark;
-	private String createdTime;
-	private String updatedTime;
+	private long createdTime;
+	private long updatedTime;
 	private AddressType addType;
 
 	public String getStrtAdd1() {
@@ -71,19 +71,19 @@ public class Address {
 		this.landmark = landmark;
 	}
 
-	public String getCreatedTime() {
+	public long getCreatedTime() {
 		return createdTime;
 	}
 
-	public void setCreatedTime(String createdTime) {
+	public void setCreatedTime(long createdTime) {
 		this.createdTime = createdTime;
 	}
 
-	public String getUpdatedTime() {
+	public long getUpdatedTime() {
 		return updatedTime;
 	}
 
-	public void setUpdatedTime(String updatedTime) {
+	public void setUpdatedTime(long updatedTime) {
 		this.updatedTime = updatedTime;
 	}
 
