@@ -21,6 +21,11 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	@RequestMapping("/d")
+	public String startHere() {
+		return "Chal gaya...";
+	}
+	
 	@RequestMapping("/register")
 	public String registerUser(@RequestBody String userObjStr) {
 		JSONObject jsonObject = new JSONObject();

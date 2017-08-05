@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nexusdevs.shoppersdeal.db.MongoDBManager;
+import com.nexusdevs.shoppersdeal.dto.User;
 
 @Service
 public class DAOService {
@@ -15,7 +16,11 @@ public class DAOService {
 	@Autowired
 	private MongoDBManager mongoDBManager;
 	
-	public void registerUser() {
-		
+	public User createUser(User user) {
+		return user;
+	}
+	
+	public String getUserDetail(String emailId) {
+		return toString();
 	}
 }
