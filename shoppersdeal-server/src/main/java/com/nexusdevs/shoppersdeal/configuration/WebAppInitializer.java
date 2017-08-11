@@ -16,6 +16,7 @@ public class WebAppInitializer extends WebMvcConfigurerAdapter implements WebApp
 	private String TMP_Folder = "";
 	private int MAX_UPLOAD_SIZE = 5 * 1024 * 1024;
 	
+	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
 		servletContext.getServletRegistration("default").addMapping("*.json","*.js","*..html","*.css","*.jpg","*.png","*.gif","*.ico","*.eot","*.svg","*.ttf","*.woff","*.otf","*.woff2","","","","");
 		servletContext.getServletRegistration("jsp").addMapping("*.jsp");

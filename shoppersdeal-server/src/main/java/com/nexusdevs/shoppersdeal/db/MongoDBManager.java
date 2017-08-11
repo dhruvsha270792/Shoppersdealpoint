@@ -10,6 +10,7 @@ import com.mongodb.WriteConcern;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
+@SuppressWarnings({"unused"})
 public class MongoDBManager {
 
 	private static final Logger logger = LoggerFactory.getLogger(MongoDBManager.class);
@@ -45,5 +46,4 @@ public class MongoDBManager {
 		collection.insertOne(doc);
 		return null;
 	}
-	
 }
