@@ -12,10 +12,9 @@ public class User {
 	private String email;
 	private String passcode;
 	private List<Address> address;
-	private String city;
-	private String state;
-	private String country;
 	private Boolean mailSubscription;
+	private Boolean verified;
+	private Boolean blocked;
 	private long createTime;
 	private long updateTime;
 
@@ -83,36 +82,28 @@ public class User {
 		this.address = address;
 	}
 
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
 	public Boolean getMailSubscription() {
 		return mailSubscription;
 	}
 
 	public void setMailSubscription(Boolean mailSubscription) {
 		this.mailSubscription = mailSubscription;
+	}
+	
+	public Boolean getVerified() {
+		return verified;
+	}
+
+	public void setVerified(Boolean verified) {
+		this.verified = verified;
+	}
+	
+	public Boolean getBlocked() {
+		return blocked;
+	}
+
+	public void setBlocked(Boolean blocked) {
+		this.blocked = blocked;
 	}
 
 	public long getCreateTime() {
@@ -130,5 +121,4 @@ public class User {
 	public void setUpdateTime(long updateTime) {
 		this.updateTime = updateTime;
 	}
-
 }

@@ -5,16 +5,16 @@ import org.json.simple.JSONValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.nexusdevs.shoppersdeal.service.UserService;
 
-@SuppressWarnings({"unchecked"})
-@Controller
+@RestController
 @RequestMapping("/u")
+@SuppressWarnings({"unchecked"})
 public class UserController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -22,17 +22,16 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping("/d")
-	@ResponseBody
+	@RequestMapping(value = "/start")
 	public String startHere() {
-		return "Chal gaya...";
+		return "Chal gaya";
 	}
 	
-	@RequestMapping("/register")
+	@RequestMapping(value = "/register" , method = RequestMethod.POST)
 	public String registerUser(@RequestBody String userObjStr) {
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("success", false);
 		jsonObject.put("data", "Error to create user");
+		jsonObject.put("success", false);
 		try {
 			JSONObject regUserObj = (JSONObject) JSONValue.parse(userObjStr);
 			JSONObject registerStatus = userService.registerUser(regUserObj);
@@ -44,18 +43,48 @@ public class UserController {
 		return jsonObject.toString();
 	}
 	
-	@RequestMapping("/login")
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(@RequestBody String loginObjStr) {
-		JSONObject jsonObject  = new JSONObject();
-		jsonObject.put("success", false);
+		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("data", "Invalid Username/Password");
-		try{
-			JSONObject loginObj = (JSONObject) JSONValue.parse(loginObjStr);
-			JSONObject loginStatus = userService.login(loginObj);
+		jsonObject.put("success", false);
+		try {
+			JSONObject loginUserObj = (JSONObject) JSONValue.parse(loginObjStr);
+			JSONObject loginStatus = userService.login(loginUserObj);
 			return loginStatus.toString();
+		}
+		catch(Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return jsonObject.toString();
+	}
+	
+	@RequestMapping(value="/logout", method = RequestMethod.POST)
+	public String logout(@RequestBody String logoutObjStr) {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("data", "logout unsuccessful");
+		jsonObject.put("success", false);
+		try {
+			JSONObject logoutUserObj = (JSONObject) JSONValue.parse(logoutObjStr);
+			JSONObject logoutStatus = userService.logout(logoutUserObj);
+			return logoutStatus.toString();
 		}
 		catch (Exception e) {
 			logger.error(e.getMessage(), e);
+		}
+		return jsonObject.toString();
+	}
+	
+	@RequestMapping(value="/validate", method = RequestMethod.POST)
+	public String validate(@RequestBody String validateTokenStr) {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("data", "invalid token");
+		jsonObject.put("success", false);
+		try{
+			
+		}
+		catch (Exception e) {
+			logger.error(e.getMessage(),e);
 		}
 		return jsonObject.toString();
 	}
