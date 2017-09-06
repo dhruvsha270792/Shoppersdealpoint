@@ -7,7 +7,8 @@ public class Rating {
 	private int stars;
 	private long createTime;
 	private long updateTime;
-
+	private boolean deleted;
+	
 	public String getUsername() {
 		return username;
 	}
@@ -48,4 +49,11 @@ public class Rating {
 		this.updateTime = updateTime;
 	}
 
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 }

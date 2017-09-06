@@ -23,6 +23,7 @@ public class Products {
 	private List<String> p_subCategory;
 	private List<String> tags;
 	private DealCategory deal_category;
+	private boolean deleted;
 
 	public String getId() {
 		return id;
@@ -159,5 +160,12 @@ public class Products {
 	public void setDeal_category(DealCategory deal_category) {
 		this.deal_category = deal_category;
 	}
-	
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}	
 }

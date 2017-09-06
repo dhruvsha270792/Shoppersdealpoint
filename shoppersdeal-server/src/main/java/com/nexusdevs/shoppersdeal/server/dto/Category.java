@@ -1,12 +1,21 @@
 package com.nexusdevs.shoppersdeal.server.dto;
 
 public class Category {
-
-	private int id;
+	
+	private String id;
 	private String categoryId;
 	private String category;
 	private long createTime;
 	private long updateTime;
+	private boolean deleted;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getCategoryId() {
 		return categoryId;
@@ -14,14 +23,6 @@ public class Category {
 
 	public void setCategoryId(String categoryId) {
 		this.categoryId = categoryId;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public String getCategory() {
@@ -48,4 +49,11 @@ public class Category {
 		this.updateTime = updateTime;
 	}
 
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 }

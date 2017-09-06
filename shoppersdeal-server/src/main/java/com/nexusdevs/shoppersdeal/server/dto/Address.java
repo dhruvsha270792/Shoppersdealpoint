@@ -14,6 +14,7 @@ public class Address {
 	private long createdTime;
 	private long updatedTime;
 	private AddressType addType;
+	private boolean deleted;
 
 	public String getStrtAdd1() {
 		return strtAdd1;
@@ -93,6 +94,14 @@ public class Address {
 
 	public void setAddType(AddressType addType) {
 		this.addType = addType;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 }

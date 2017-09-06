@@ -8,6 +8,7 @@ public class SubCategory {
 	private String category;
 	private long createTime;
 	private long updateTime;
+	private boolean deleted;
 
 	public int getId() {
 		return id;
@@ -57,4 +58,11 @@ public class SubCategory {
 		this.updateTime = updateTime;
 	}
 
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 }

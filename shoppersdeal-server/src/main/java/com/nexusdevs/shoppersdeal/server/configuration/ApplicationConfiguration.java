@@ -21,8 +21,8 @@ public class ApplicationConfiguration {
 	
 	@Bean
 	public MongoDBManager mongoDBManager(){
-		String host = env.getProperty("mongodb.deals.host");
-		String db = env.getProperty("mongodb.deals.db");
+		String host = env.getProperty("mongo.shoppers.host");
+		String db = env.getProperty("mongo.shoppers.db");
 		MongoDBManager mdb = new MongoDBManager(host, db);
 		return mdb;
 	}

@@ -1,7 +1,5 @@
 package com.nexusdevs.shoppersdeal.server.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.nexusdevs.shoppersdeal.server.dto.Category;
-import com.nexusdevs.shoppersdeal.server.dto.Products;
-import com.nexusdevs.shoppersdeal.server.dto.SubCategory;
 import com.nexusdevs.shoppersdeal.server.service.ConsoleService;
 import com.nexusdevs.shoppersdeal.server.utils.JsonUtils;
 
@@ -31,23 +26,20 @@ public class ConsoleController {
 	@Autowired
 	private ConsoleService consoleService;
 
-	@RequestMapping(value = "/list/category", method = RequestMethod.POST)
+	@RequestMapping(value = "/list/category")
 	@ResponseBody
 	public String listCategory(@RequestParam(defaultValue = "10") int n, @RequestParam(defaultValue = "0") int pos) {
 		try {
 			String sortField = "createTime";
 			String sortType = "ASCENDING";
 			int total = 0;
-			List<Category> categories = consoleService.categoryList(n, pos, sortField, sortType);
+			JsonArray categories = consoleService.categoryList(n, pos, sortField, sortType);
 			if (categories == null)
 				total = 0;
-
-			JsonArray categoryArray = new JsonArray();
-			JsonParser jsParser = new JsonParser();
-			categories.stream().map(o -> (JsonObject) jsParser.parse(new Gson().toJson(o, Category.class)))
-					.forEach(j -> categoryArray.add(j));
-			total = categoryArray.size();
-			return JsonUtils.createPaginatedResponse(categoryArray, total, pos).toString();
+			else {
+				total = categories.size();
+			}
+			return JsonUtils.createPaginatedResponse(categories, total, pos).toString();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
@@ -55,60 +47,82 @@ public class ConsoleController {
 	}
 
 	@RequestMapping(value = "/add/category", method = RequestMethod.POST)
-	@ResponseBody
+  	@ResponseBody
 	public String addCategory(@RequestBody String categoryObjStr) {
-		JsonObject JsonObject = new JsonObject();
-		JsonObject.addProperty("data", "Error to add category");
-		JsonObject.addProperty("success", false);
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("data", "Error to add category");
+		jsonObject.addProperty("success", false);
 		try {
 			Category category = new Gson().fromJson(categoryObjStr, Category.class);
-			JsonObject status = consoleService.addCategory(category);
-			return status.toString();
+			String status = consoleService.addCategory(category);
+			return status;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		return JsonObject.toString();
+		return jsonObject.toString();
+	}
+	
+	@RequestMapping(value = "/get/category", method = RequestMethod.POST)
+  	@ResponseBody
+	public String getCategoryDetails(@RequestBody String categoryIdObj) {
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("data", "Error to get category details");
+		jsonObject.addProperty("success", false);
+		try {
+			Category category = new Gson().fromJson(categoryIdObj, Category.class);
+			String status = consoleService.getCategoryDetails(category.getCategoryId());
+			return status;
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return jsonObject.toString();
 	}
 
 	@RequestMapping(value = "/update/category", method = RequestMethod.POST)
 	@ResponseBody
 	public String updateCategory(@RequestBody String categoryObjStr) {
-		JsonObject JsonObject = new JsonObject();
-		JsonObject.addProperty("data", "Error to update category");
-		JsonObject.addProperty("success", false);
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("data", "Error to update category");
+		jsonObject.addProperty("success", false);
 		try {
 			Category category = new Gson().fromJson(categoryObjStr, Category.class);
-			JsonObject status = consoleService.updateCategory(category);
-			return status.toString();
+			String status = consoleService.updateCategory(category);
+			return status;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		return JsonObject.toString();
+		return jsonObject.toString();
 	}
 
 	@RequestMapping(value = "/temp/delete/category", method = RequestMethod.POST)
 	@ResponseBody
 	public String tempDeleteCategory(@RequestBody String categoryIdObj) {
-		JsonObject JsonObject = new JsonObject();
-		JsonObject.addProperty("data", "Error to archive category");
-		JsonObject.addProperty("success", false);
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("data", "Error to archive category");
+		jsonObject.addProperty("success", false);
 		try {
-			JsonObject status = consoleService.tempDeleteCategory(categoryIdObj);
-			return status.toString();
+			Category category = new Gson().fromJson(categoryIdObj, Category.class);
+			String status = consoleService.tempDeleteCategory(category.getCategoryId());
+			if(status.equals("false"))
+				return JsonUtils.errorResponse("unable to archive category").toString();
+			
+			jsonObject.addProperty("success", status);
+			jsonObject.addProperty("data", "archive successfully");
+			return jsonObject.toString();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		return JsonObject.toString();
+		return jsonObject.toString();
 	}
 
 	@RequestMapping(value = "/delete/category", method = RequestMethod.POST)
 	@ResponseBody
-	public String deleteCategory(@RequestBody String categoryIdObj) {
+	public String deleteCategory(@RequestBody String categoryId) {
 		JsonObject JsonObject = new JsonObject();
 		JsonObject.addProperty("data", "Error to delete category");
 		JsonObject.addProperty("success", false);
 		try {
-			JsonObject status = consoleService.deleteCategory(categoryIdObj);
+			String status = consoleService.deleteCategory(categoryId);
 			return status.toString();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -116,7 +130,7 @@ public class ConsoleController {
 		return JsonObject.toString();
 	}
 
-	@RequestMapping(value = "/list/subcategory", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/list/subcategory", method = RequestMethod.POST)
 	@ResponseBody
 	public String listSubcategory(@RequestParam(defaultValue = "10") int n, @RequestParam(defaultValue = "0") int pos) {
 		try {
@@ -282,5 +296,5 @@ public class ConsoleController {
 			logger.error(e.getMessage(), e);
 		}
 		return JsonObject.toString();
-	}	
+	}*/	
 }

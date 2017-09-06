@@ -24,11 +24,11 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.result.UpdateResult;
 
 public class MongoDBManager {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(MongoDBManager.class);
+	private static final Logger logger = LoggerFactory.getLogger(MongoDBManager.class);
 
 	private MongoClient mongoClient;
 	private MongoDatabase mongoDB;
@@ -39,13 +39,11 @@ public class MongoDBManager {
 
 	private void init(String host, String dbName) {
 		try {
-			MongoClientOptions mongoOptions = MongoClientOptions.builder()
-					.connectionsPerHost(50).connectTimeout(10000)
-					.maxWaitTime(10000)
-					.threadsAllowedToBlockForConnectionMultiplier(50).build();
+			MongoClientOptions mongoOptions = MongoClientOptions.builder().connectionsPerHost(500).connectTimeout(10000)
+					.maxWaitTime(10000).threadsAllowedToBlockForConnectionMultiplier(500)
+					.writeConcern(WriteConcern.ACKNOWLEDGED).build();
 
 			mongoClient = new MongoClient(host, mongoOptions);
-			mongoClient.setWriteConcern(WriteConcern.SAFE);
 			mongoDB = mongoClient.getDatabase(dbName);
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
@@ -57,83 +55,71 @@ public class MongoDBManager {
 	}
 
 	public String addObject(String collectionName, String id, String jsonData) {
-		MongoCollection<Document> collection = getDB().getCollection(
-				collectionName);
+		MongoCollection<Document> collection = getDB().getCollection(collectionName);
 		Document doc = Document.parse(jsonData);
 		if (id != null && !id.trim().equals("")) {
-			collection.updateOne(new Document("_id", new ObjectId(id)), new Document(
-					"$set", new Document(doc)));
+			collection.updateOne(new Document("_id", new ObjectId(id)), new Document("$set", new Document(doc)));
 			return id;
 		} else {
 			doc.remove("_id");
 			collection.insertOne(doc);
-			Object objectId =  doc.get("_id");
-			return objectId==null?null:objectId.toString();
+			Object objectId = doc.get("_id");
+			return objectId == null ? null : objectId.toString();
 		}
 	}
-	
-	public void updateObject(String collectionName, Map<String, Object> queryParam, String jsonData){
-		MongoCollection<Document> collection = getDB().getCollection(
-				collectionName);
+
+	public Document updateObject(String collectionName, Map<String, Object> queryParam, String jsonData) {
+		MongoCollection<Document> collection = getDB().getCollection(collectionName);
 		Document doc = Document.parse(jsonData);
 		doc.remove("_id");
-		Document document = collection.findOneAndUpdate(new Document(queryParam), new Document(
-				"$set", new Document(doc)));
-		if(document==null){
+		Document document = collection.findOneAndUpdate(new Document(queryParam), new Document("$set", new Document(doc)));
+		if (document == null) {
 			collection.insertOne(doc);
 		}
+		return document;
 	}
 
 	public String addObject(String collectionName, String jsonData) {
 		return addObject(collectionName, null, jsonData);
 	}
 
-	public Document getObject(String collectionName,
-			Map<String, Object> queryParams) {
-		MongoCollection<Document> collection = getDB().getCollection(
-				collectionName);
+	public Document getObject(String collectionName, Map<String, Object> queryParams) {
+		MongoCollection<Document> collection = getDB().getCollection(collectionName);
 		Document doc = new Document(queryParams);
 		Document result = collection.find(doc).first();
 		return result;
 	}
 
-	public List<Document> getObjects(String collectionName,
-			Map<String, Object> queryParams) {
+	public List<Document> getObjects(String collectionName, Map<String, Object> queryParams) {
 		return getObjects(collectionName, 0, -1, queryParams, null);
 	}
 
 	// give negative value of n to get all results
-	public List<Document> getObjects(String collectionName, int startPos,
-			int n, Map<String, Object> queryParams,
+	public List<Document> getObjects(String collectionName, int startPos, int n, Map<String, Object> queryParams,
 			Map<String, Object> sortingKey) {
 
-		return getObjects(collectionName, startPos, n, queryParams, null,
-				sortingKey);
+		return getObjects(collectionName, startPos, n, queryParams, null, sortingKey);
 	}
 
-	public List<Document> getObjects(String collectionName, int startPos,
-			int n, Map<String, Object> queryParams, List<String> fields,
-			Map<String, Object> sortingKey) {
+	public List<Document> getObjects(String collectionName, int startPos, int n, Map<String, Object> queryParams,
+			List<String> fields, Map<String, Object> sortingKey) {
 		List<Document> objList = new ArrayList<Document>();
 		if (startPos < 0) {
 			return objList;
 		}
-		MongoCollection<Document> collection = getDB().getCollection(
-				collectionName);
+		MongoCollection<Document> collection = getDB().getCollection(collectionName);
 		if (collection == null) {
 			return objList;
 		}
-		if(queryParams==null){
+		if (queryParams == null) {
 			queryParams = new HashMap<>();
 		}
-		FindIterable<Document> find = collection
-				.find(new Document(queryParams));
+		FindIterable<Document> find = collection.find(new Document(queryParams));
 		if (sortingKey != null && sortingKey.size() > 0) {
 			find = find.sort(new Document(sortingKey));
 		}
 		if (fields != null && fields.size() > 0) {
-			Map<String, Object> fieldMap = fields.stream().collect(
-					Collectors.toMap(s -> s, s -> 1));
+			Map<String, Object> fieldMap = fields.stream().collect(Collectors.toMap(s -> s, s -> 1));
 			find = find.projection(new Document(fieldMap));
 		}
 		if (startPos > 0) {
@@ -159,12 +145,9 @@ public class MongoDBManager {
 	}
 
 	public boolean deleteObject(String collectionName, String objectId) {
-		MongoCollection<Document> collection = getDB().getCollection(
-				collectionName);
+		MongoCollection<Document> collection = getDB().getCollection(collectionName);
 		try {
-			Document findOneAndDelete = collection
-					.findOneAndDelete(new Document("_id",
-							new ObjectId(objectId)));
+			Document findOneAndDelete = collection.findOneAndDelete(new Document("_id", new ObjectId(objectId)));
 			return findOneAndDelete != null;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -172,76 +155,70 @@ public class MongoDBManager {
 		return false;
 	}
 
-	public boolean deleteObject(String collectionName,
-			Map<String, Object> queryParams) {
-		try{
-			MongoCollection<Document> collection = getDB().getCollection(
-					collectionName);
+	public boolean deleteObject(String collectionName, Map<String, Object> queryParams) {
+		try {
+			MongoCollection<Document> collection = getDB().getCollection(collectionName);
 			Document findOneAndDelete = collection.findOneAndDelete(new Document(queryParams));
 			return findOneAndDelete != null;
-			
-		}catch(Exception e){
+
+		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
 		return false;
 	}
-	
-	public void deleteObjects(String collectionName,
-			Map<String, Object> queryParams) {
-		MongoCollection<Document> collection = getDB().getCollection(
-				collectionName);
+
+	public void deleteObjects(String collectionName, Map<String, Object> queryParams) {
+		MongoCollection<Document> collection = getDB().getCollection(collectionName);
 		collection.deleteMany(new Document(queryParams));
 	}
 
 	public long getCount(String collectionName, Map<String, Object> queryParams) {
-		MongoCollection<Document> collection = getDB().getCollection(
-				collectionName);
+		MongoCollection<Document> collection = getDB().getCollection(collectionName);
 		if (collection == null) {
 			return 0;
 		}
 		long count = collection.count(new Document(queryParams));
 		return count;
 	}
-
-	public boolean setField(String collectionName,
-			Map<String, Object> queryParams, Map<String, Object> fieldValueMap) {
+	
+	
+	public boolean setField(String collectionName, Map<String, Object> queryParams, Map<String, Object> fieldValueMap) {
 		return setField(collectionName, queryParams, fieldValueMap, true, false);
 	}
-
-	public boolean setField(String collectionName,
-			Map<String, Object> queryParams, Map<String, Object> fieldValueMap,
-			boolean upsert, boolean multi) {
-		MongoCollection<Document> collection = getDB().getCollection(
-				collectionName);
+	
+	public boolean setField(String collectionName, Map<String, Object> queryParams, Map<String, Object> fieldValueMap, boolean upsert, boolean multi) {
+		MongoCollection<Document> collection = getDB().getCollection(collectionName);
+		UpdateResult res;
 		try {
 			if (multi) {
-				collection.updateMany(new Document(queryParams), new Document(
-						"$set", new Document(fieldValueMap)),
+				res = collection.updateMany(new Document(queryParams), new Document("$set", new Document(fieldValueMap)),
 						new UpdateOptions().upsert(upsert));
 			} else {
-				collection.updateOne(new Document(queryParams), new Document(
-						"$set", new Document(fieldValueMap)),
+				res = collection.updateOne(new Document(queryParams), new Document("$set", new Document(fieldValueMap)),
 						new UpdateOptions().upsert(upsert));
 			}
-			return true;
+			
+			if(res.getModifiedCount() > 0)
+				return true;
+			
+			return false;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			return false;
 		}
-
 	}
-	
-	public List<String> getDistinctValues(String collectionName,String fieldName,Map<String, Object> queryParams){
+
+	public List<String> getDistinctValues(String collectionName, String fieldName, Map<String, Object> queryParams) {
 		List<String> objList = new ArrayList<>();
-		MongoCollection<Document> collection = getDB().getCollection(
-				collectionName);
+		MongoCollection<Document> collection = getDB().getCollection(collectionName);
 		if (collection == null) {
 			return objList;
 		}
-		if(queryParams==null){
+		if (queryParams == null) {
 			queryParams = new HashMap<>();
 		}
-		DistinctIterable<String> distinctIterable = collection.distinct(fieldName, new Document(queryParams), String.class);
+		DistinctIterable<String> distinctIterable = collection.distinct(fieldName, new Document(queryParams),
+				String.class);
 		distinctIterable.forEach(new Block<String>() {
 
 			@Override
@@ -251,57 +228,57 @@ public class MongoDBManager {
 		});
 		return objList;
 	}
-	
-	public JsonArray aggregateCount(String collectionName, List<String> fields,Map<String, Object> queryParams){
-		MongoCollection<Document> collection = getDB().getCollection(
-				collectionName);
+
+	public JsonArray aggregateCount(String collectionName, List<String> fields, Map<String, Object> queryParams) {
+		MongoCollection<Document> collection = getDB().getCollection(collectionName);
 		if (collection == null) {
 			return null;
 		}
-		if(queryParams==null){
+		if (queryParams == null) {
 			queryParams = new HashMap<>();
 		}
 		List<Document> aggregateList = new ArrayList<>();
-		if(queryParams!=null){
+		if (queryParams != null) {
 			aggregateList.add(new Document("$match", new Document(queryParams)));
 		}
 		Document idDocument = new Document();
-		fields.forEach(s -> {idDocument.put(s, "$"+s);});
+		fields.forEach(s -> {
+			idDocument.put(s, "$" + s);
+		});
 		Document groupDocument = new Document();
 		groupDocument.append("_id", idDocument);
 		groupDocument.append("count", new Document("$sum", 1));
-		aggregateList.add(new Document("$group",groupDocument));
-		
+		aggregateList.add(new Document("$group", groupDocument));
+
 		AggregateIterable<Document> aggregate = collection.aggregate(aggregateList);
 		JsonArray objList = new JsonArray();
 		aggregate.forEach(new Block<Document>() {
 
-			@SuppressWarnings({ "unchecked", "rawtypes" })
 			@Override
 			public void apply(Document paramT) {
 				JsonObject jsonObj = new JsonObject();
-				jsonObj.put("count", paramT.get("count"));
-				jsonObj.putAll((Map) paramT.get("_id"));
+				jsonObj.addProperty("count", paramT.get("count").toString());
+				// jsonObj.putAll((Map) paramT.get("_id"));
 				objList.add(jsonObj);
 			}
 		});
 		return objList;
 	}
-	
-	public void addToFields(String collectionName,Map<String, Object> queryParams,Map<String,? extends Number> numbersToAdd, boolean multi){
-		MongoCollection<Document> collection = getDB().getCollection(
-				collectionName);
+
+	public void addToFields(String collectionName, Map<String, Object> queryParams,
+			Map<String, ? extends Number> numbersToAdd, boolean multi) {
+		MongoCollection<Document> collection = getDB().getCollection(collectionName);
 		if (collection == null) {
 			return;
 		}
-		if(queryParams==null){
+		if (queryParams == null) {
 			queryParams = new HashMap<>();
 		}
-		Map<String,Object> numObj = new HashMap<>();
+		Map<String, Object> numObj = new HashMap<>();
 		numObj.putAll(numbersToAdd);
-		if(multi){
+		if (multi) {
 			collection.updateMany(new Document(queryParams), new Document("$inc", new Document(numObj)));
-		}else{
+		} else {
 			collection.updateOne(new Document(queryParams), new Document("$inc", new Document(numObj)));
 		}
 	}

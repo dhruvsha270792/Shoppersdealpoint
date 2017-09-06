@@ -16,7 +16,6 @@ import com.nexusdevs.shoppersdeal.server.service.UserService;
 
 @RestController
 @RequestMapping("/u")
-@SuppressWarnings({"unchecked"})
 public class UserController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);

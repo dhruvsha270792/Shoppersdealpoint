@@ -1,7 +1,10 @@
 package com.nexusdevs.shoppersdeal.server.service;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.bson.Document;
 import org.slf4j.Logger;
@@ -14,6 +17,7 @@ import com.google.gson.JsonObject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.util.JSON;
 import com.nexusdevs.shoppersdeal.server.db.MongoDBManager;
+import com.nexusdevs.shoppersdeal.server.dto.Category;
 import com.nexusdevs.shoppersdeal.server.dto.User;
 import com.nexusdevs.shoppersdeal.server.dto.UserSession;
 import com.nexusdevs.shoppersdeal.server.utils.JsonUtils;
@@ -26,6 +30,7 @@ public class DAOService {
 
 	private static String USER_COLLECTION = "users";
 	private static String USER_SESSION_COLLECTION = "user_session";
+	private static String CATEGORY_COLLECTION = "categories";
 
 	@Autowired
 	private MongoDBManager mongoDBManager;
@@ -40,12 +45,20 @@ public class DAOService {
 	}
 	
 	//get user session from document
-		public UserSession getUserSessionFromDocument(Document doc) {
-			Object idObj = doc.remove("_id");
-			BasicDBObject dbObj = (BasicDBObject) JSON.parse(doc.toJson());
-			UserSession userSessionObject = new Gson().fromJson(dbObj.toString(), UserSession.class);
-			return userSessionObject;
-		}
+	public UserSession getUserSessionFromDocument(Document doc) {
+		Object idObj = doc.remove("_id");
+		BasicDBObject dbObj = (BasicDBObject) JSON.parse(doc.toJson());
+		UserSession userSessionObject = new Gson().fromJson(dbObj.toString(), UserSession.class);
+		return userSessionObject;
+	}
+	
+	//get category from document
+	public Category getCategoryFromDocument(Document doc) {
+		Object idObj = doc.remove("_id");
+		BasicDBObject dbObj = (BasicDBObject) JSON.parse(doc.toJson());
+		Category categoryObject = new Gson().fromJson(dbObj.toString(), Category.class);
+		return categoryObject;
+	}
 	
 	//create new user
 	public String createUser(User user) {
@@ -105,5 +118,73 @@ public class DAOService {
 			return null;
 		
 		return getUserSessionFromDocument(document);
+	}
+	
+	//get category list
+	public List<Category> getCategoryList(int n, int pos, String sF, String sT) {
+		Map<String, Object> queryParams = new HashMap<>();
+		queryParams.put("deleted", false);
+		
+		Map<String, Object> sortingKey = new HashMap<>();
+		if (sF != null) {
+			int sort = -1;
+			if (sT.equalsIgnoreCase("ASC")) {
+				sort = 1;
+			}
+			sortingKey.put(sF, sort);
+		}
+
+		List<Document> objects = mongoDBManager.getObjects(CATEGORY_COLLECTION, pos, n, queryParams, sortingKey);
+		if (objects != null) {
+			List<Category> list = objects.stream().map(o -> getCategoryFromDocument(o)).collect(Collectors.toList());
+			return list;
+		}
+		return Collections.emptyList();
+	}
+	
+	//create new category
+	public String createCategory(Category category) {
+		String categoryObj = new Gson().toJson(category);
+		String addObject = mongoDBManager.addObject(CATEGORY_COLLECTION, categoryObj);
+		return addObject;
+	}
+	
+	//get category details
+	public Category getCategoryDetails(String categoryId) {
+		Map<String, Object> queryParams = new HashMap<>();
+		queryParams.put("categoryId", categoryId);
+		Document document = mongoDBManager.getObject(CATEGORY_COLLECTION, queryParams);
+		if (document == null)
+			return null;
+		Category category = getCategoryFromDocument(document);
+		return category;
+	}
+	
+	//update category
+	public Category updateCategory(Category category) {
+		String json = new Gson().toJson(category);
+		Map<String, Object> queryParam = new HashMap<>();
+		queryParam.put("categoryId", category.getCategoryId());
+		Document doc = mongoDBManager.updateObject(CATEGORY_COLLECTION, queryParam, json);
+		if(doc == null)
+			return null;
+		return getCategoryFromDocument(doc);
+	}
+	
+	//temporary delete category
+	public Boolean tempDeleteCategory(String categoryId) {
+		Map<String, Object> queryParams = new HashMap<>();
+		queryParams.put("categoryId", categoryId);
+		Map<String, Object> fieldValue = new HashMap<>();
+		fieldValue.put("deleted", true);
+		Boolean status = mongoDBManager.setField(CATEGORY_COLLECTION, queryParams, fieldValue);
+		return status;
+	}
+	
+	//delete category
+	public void deleteCategory(String categoryId) {
+		Map<String, Object> queryParams = new HashMap<>();
+		queryParams.put("categoryId", categoryId);
+		mongoDBManager.deleteObjects(CATEGORY_COLLECTION, queryParams);
 	}
 }
