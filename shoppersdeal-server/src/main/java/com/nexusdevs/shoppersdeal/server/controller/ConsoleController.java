@@ -14,6 +14,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.nexusdevs.shoppersdeal.server.dto.Category;
+import com.nexusdevs.shoppersdeal.server.dto.Products;
+import com.nexusdevs.shoppersdeal.server.dto.SubCategory;
 import com.nexusdevs.shoppersdeal.server.service.ConsoleService;
 import com.nexusdevs.shoppersdeal.server.utils.JsonUtils;
 
@@ -25,7 +27,8 @@ public class ConsoleController {
 
 	@Autowired
 	private ConsoleService consoleService;
-
+	
+	/*Category Start*/
 	@RequestMapping(value = "/list/category")
 	@ResponseBody
 	public String listCategory(@RequestParam(defaultValue = "10") int n, @RequestParam(defaultValue = "0") int pos) {
@@ -64,12 +67,12 @@ public class ConsoleController {
 	
 	@RequestMapping(value = "/get/category", method = RequestMethod.POST)
   	@ResponseBody
-	public String getCategoryDetails(@RequestBody String categoryIdObj) {
+	public String getCategoryDetails(@RequestBody String categoryObjStr) {
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty("data", "Error to get category details");
 		jsonObject.addProperty("success", false);
 		try {
-			Category category = new Gson().fromJson(categoryIdObj, Category.class);
+			Category category = new Gson().fromJson(categoryObjStr, Category.class);
 			String status = consoleService.getCategoryDetails(category.getCategoryId());
 			return status;
 		} catch (Exception e) {
@@ -93,16 +96,17 @@ public class ConsoleController {
 		}
 		return jsonObject.toString();
 	}
-
-	@RequestMapping(value = "/temp/delete/category", method = RequestMethod.POST)
+	
+	
+	@RequestMapping(value = "/archive/category", method = RequestMethod.POST)
 	@ResponseBody
-	public String tempDeleteCategory(@RequestBody String categoryIdObj) {
+	public String archiveCategory(@RequestBody String categoryObjStr) {
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty("data", "Error to archive category");
 		jsonObject.addProperty("success", false);
 		try {
-			Category category = new Gson().fromJson(categoryIdObj, Category.class);
-			String status = consoleService.tempDeleteCategory(category.getCategoryId());
+			Category category = new Gson().fromJson(categoryObjStr, Category.class);
+			String status = consoleService.archiveCategory(category.getCategoryId());
 			if(status.equals("false"))
 				return JsonUtils.errorResponse("unable to archive category").toString();
 			
@@ -114,38 +118,62 @@ public class ConsoleController {
 		}
 		return jsonObject.toString();
 	}
-
-	@RequestMapping(value = "/delete/category", method = RequestMethod.POST)
+	
+	
+	@RequestMapping(value = "/unarchive/category", method = RequestMethod.POST)
 	@ResponseBody
-	public String deleteCategory(@RequestBody String categoryId) {
-		JsonObject JsonObject = new JsonObject();
-		JsonObject.addProperty("data", "Error to delete category");
-		JsonObject.addProperty("success", false);
+	public String unarchiveCategory(@RequestBody String categoryObjStr) {
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("data", "Error to unarchive category");
+		jsonObject.addProperty("success", false);
 		try {
-			String status = consoleService.deleteCategory(categoryId);
-			return status.toString();
+			Category category = new Gson().fromJson(categoryObjStr, Category.class);
+			String status = consoleService.unarchiveCategory(category.getCategoryId());
+			if(status.equals("false"))
+				return JsonUtils.errorResponse("unable to unarchive category").toString();
+			
+			jsonObject.addProperty("success", status);
+			jsonObject.addProperty("data", "unarchive successfully");
+			return jsonObject.toString();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		return JsonObject.toString();
+		return jsonObject.toString();
 	}
 
-	/*@RequestMapping(value = "/list/subcategory", method = RequestMethod.POST)
+	@RequestMapping(value = "/delete/category", method = RequestMethod.POST)
+	@ResponseBody
+	public String deleteCategory(@RequestBody String categoryObjStr) {
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("data", "Error to delete category");
+		jsonObject.addProperty("success", false);
+		try {
+			Category category = new Gson().fromJson(categoryObjStr, Category.class);
+			String status = consoleService.deleteCategory(category.getCategoryId());
+			return status;
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return jsonObject.toString();
+	}
+	/*Category End*/
+	
+	
+	/*Sub-Category Start*/
+	@RequestMapping(value = "/list/subcategory")
 	@ResponseBody
 	public String listSubcategory(@RequestParam(defaultValue = "10") int n, @RequestParam(defaultValue = "0") int pos) {
 		try {
 			String sortField = "createTime";
 			String sortType = "ASCENDING";
 			int total = 0;
-			List<SubCategory> subcategories = consoleService.subCategoryList(n, pos, sortField, sortType);
+			JsonArray subcategories = consoleService.subcategoryList(n, pos, sortField, sortType);
 			if (subcategories == null)
 				total = 0;
-
-			JsonArray subcategoryArray = new JsonArray();
-			JsonParser jsParser = new JsonParser();
-			subcategories.stream().map(o -> (JsonObject) jsParser.parse(new Gson().toJson(o, SubCategory.class))).forEach(j -> subcategoryArray.add(j));
-			total = subcategoryArray.size();
-			return JsonUtils.createPaginatedResponse(subcategoryArray, total, pos).toString();
+			else {
+				total = subcategories.size();
+			}
+			return JsonUtils.createPaginatedResponse(subcategories, total, pos).toString();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
@@ -153,148 +181,217 @@ public class ConsoleController {
 	}
 
 	@RequestMapping(value = "/add/subcategory", method = RequestMethod.POST)
-	@ResponseBody
+  	@ResponseBody
 	public String addSubcategory(@RequestBody String subcategoryObjStr) {
-		JsonObject JsonObject = new JsonObject();
-		JsonObject.addProperty("data", "Error to add subcategory");
-		JsonObject.addProperty("success", false);
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("data", "Error to add subcategory");
+		jsonObject.addProperty("success", false);
 		try {
 			SubCategory subcategory = new Gson().fromJson(subcategoryObjStr, SubCategory.class);
-			JsonObject status = consoleService.addSubCategory(subcategory);
-			return status.toString();
+			String status = consoleService.addSubcategory(subcategory);
+			return status;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		return JsonObject.toString();
+		return jsonObject.toString();
+	}
+	
+	@RequestMapping(value = "/get/subcategory", method = RequestMethod.POST)
+  	@ResponseBody
+	public String getSubcategoryDetails(@RequestBody String subcategoryObjStr) {
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("data", "Error to get subcategory details");
+		jsonObject.addProperty("success", false);
+		try {
+			SubCategory subCategory = new Gson().fromJson(subcategoryObjStr, SubCategory.class);
+			String status = consoleService.getSubcategoryDetails(subCategory);
+			return status;
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return jsonObject.toString();
 	}
 
 	@RequestMapping(value = "/update/subcategory", method = RequestMethod.POST)
 	@ResponseBody
-	public String updateSubCategory(@RequestBody String subcategoryObjStr) {
-		JsonObject JsonObject = new JsonObject();
-		JsonObject.addProperty("data", "Error to update subcategory");
-		JsonObject.addProperty("success", false);
+	public String updateSubcategory(@RequestBody String subcategoryObjStr) {
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("data", "Error to update subcategory");
+		jsonObject.addProperty("success", false);
 		try {
 			SubCategory subcategory = new Gson().fromJson(subcategoryObjStr, SubCategory.class);
-			JsonObject status = consoleService.updateSubCategory(subcategory);
-			return status.toString();
+			String status = consoleService.updateSubcategory(subcategory);
+			return status;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		return JsonObject.toString();
+		return jsonObject.toString();
 	}
 
-	@RequestMapping(value = "/temp/delete/subcategory", method = RequestMethod.POST)
+	@RequestMapping(value = "/archive/subcategory", method = RequestMethod.POST)
 	@ResponseBody
-	public String tempDeleteSubCategory(@RequestBody String subcategoryIdObj) {
-		JsonObject JsonObject = new JsonObject();
-		JsonObject.addProperty("data", "Error to archive subcategory");
-		JsonObject.addProperty("success", false);
+	public String archiveSubcategory(@RequestBody String subcategoryObjStr) {
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("data", "Error to archive subcategory");
+		jsonObject.addProperty("success", false);
 		try {
-			JsonObject status = consoleService.tempDeleteSubCategory(subcategoryIdObj);
-			return status.toString();
+			SubCategory subcategory = new Gson().fromJson(subcategoryObjStr, SubCategory.class);
+			String status = consoleService.archiveSubcategory(subcategory);
+			if(status.equals("false"))
+				return JsonUtils.errorResponse("unable to archive subcategory").toString();
+			
+			jsonObject.addProperty("success", status);
+			jsonObject.addProperty("data", "archive successfully");
+			return jsonObject.toString();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		return JsonObject.toString();
+		return jsonObject.toString();
+	}
+	
+	@RequestMapping(value = "/unarchive/subcategory", method = RequestMethod.POST)
+	@ResponseBody
+	public String unarchiveSubcategory(@RequestBody String subcategoryObjStr) {
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("data", "Error to unarchive subcategory");
+		jsonObject.addProperty("success", false);
+		try {
+			SubCategory subcategory = new Gson().fromJson(subcategoryObjStr, SubCategory.class);
+			String status = consoleService.unarchiveSubcategory(subcategory);
+			if(status.equals("false"))
+				return JsonUtils.errorResponse("unable to unarchive subcategory").toString();
+			
+			jsonObject.addProperty("success", status);
+			jsonObject.addProperty("data", "unarchive successfully");
+			return jsonObject.toString();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return jsonObject.toString();
 	}
 
 	@RequestMapping(value = "/delete/subcategory", method = RequestMethod.POST)
 	@ResponseBody
-	public String deleteSubCategory(@RequestBody String subcategoryIdObj) {
-		JsonObject JsonObject = new JsonObject();
-		JsonObject.addProperty("data", "Error to delete subcategory");
-		JsonObject.addProperty("success", false);
+	public String deleteSubcategory(@RequestBody String subcategoryObjStr) {
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("data", "Error to delete subcategory");
+		jsonObject.addProperty("success", false);
 		try {
-			JsonObject status = consoleService.deleteSubCategory(subcategoryIdObj);
-			return status.toString();
+			SubCategory subcategory = new Gson().fromJson(subcategoryObjStr, SubCategory.class);
+			String status = consoleService.deleteSubcategory(subcategory);
+			return status;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		return JsonObject.toString();
+		return jsonObject.toString();
 	}
+	/*Sub-Category End*/
 	
-	@RequestMapping(value = "/list/product", method = RequestMethod.POST)
+	
+	/*Product Start*/
+	@RequestMapping(value = "/list/product")
 	@ResponseBody
 	public String listProduct(@RequestParam(defaultValue = "10") int n, @RequestParam(defaultValue = "0") int pos) {
 		try {
 			String sortField = "createTime";
 			String sortType = "ASCENDING";
 			int total = 0;
-			List<Products> products = consoleService.productList(n, pos, sortField, sortType);
+			JsonArray products = consoleService.productList(n, pos, sortField, sortType);
 			if (products == null)
 				total = 0;
-
-			JsonArray productArray = new JsonArray();
-			JsonParser jsParser = new JsonParser();
-			products.stream().map(o -> (JsonObject) jsParser.parse(new Gson().toJson(o, Products.class))).forEach(j -> productArray.add(j));
-			total = productArray.size();
-			return JsonUtils.createPaginatedResponse(productArray, total, pos).toString();
+			else {
+				total = products.size();
+			}
+			return JsonUtils.createPaginatedResponse(products, total, pos).toString();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
 		return JsonUtils.errorResponse("no data found").toString();
 	}
-
+	
 	@RequestMapping(value = "/add/product", method = RequestMethod.POST)
-	@ResponseBody
+  	@ResponseBody
 	public String addProduct(@RequestBody String productObjStr) {
-		JsonObject JsonObject = new JsonObject();
-		JsonObject.addProperty("data", "Error to add product");
-		JsonObject.addProperty("success", false);
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("data", "Error to add product");
+		jsonObject.addProperty("success", false);
 		try {
 			Products product = new Gson().fromJson(productObjStr, Products.class);
-			JsonObject status = consoleService.addProduct(product);
-			return status.toString();
+			String status = consoleService.addProduct(product);
+			return status;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		return JsonObject.toString();
+		return jsonObject.toString();
 	}
-
+	
+	@RequestMapping(value = "/get/product", method = RequestMethod.POST)
+  	@ResponseBody
+	public String getProductDetails(@RequestBody String productObjStr) {
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("data", "Error to get product details");
+		jsonObject.addProperty("success", false);
+		try {
+			Products product = new Gson().fromJson(productObjStr, Products.class);
+			String status = consoleService.getProductDetails(product);
+			return status;
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return jsonObject.toString();
+	}
+	
 	@RequestMapping(value = "/update/product", method = RequestMethod.POST)
 	@ResponseBody
 	public String updateProduct(@RequestBody String productObjStr) {
-		JsonObject JsonObject = new JsonObject();
-		JsonObject.addProperty("data", "Error to update product");
-		JsonObject.addProperty("success", false);
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("data", "Error to update product");
+		jsonObject.addProperty("success", false);
 		try {
 			Products product = new Gson().fromJson(productObjStr, Products.class);
-			JsonObject status = consoleService.updateProduct(product);
-			return status.toString();
+			String status = consoleService.updateProduct(product);
+			return status;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		return JsonObject.toString();
+		return jsonObject.toString();
 	}
-
+	
 	@RequestMapping(value = "/temp/delete/product", method = RequestMethod.POST)
 	@ResponseBody
-	public String tempDeleteProduct(@RequestBody String productIdObj) {
-		JsonObject JsonObject = new JsonObject();
-		JsonObject.addProperty("data", "Error to archive product");
-		JsonObject.addProperty("success", false);
+	public String tempDeleteProduct(@RequestBody String productObjStr) {
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("data", "Error to archive product");
+		jsonObject.addProperty("success", false);
 		try {
-			JsonObject status = consoleService.tempDeleteProduct(productIdObj);
-			return status.toString();
+			Products product = new Gson().fromJson(productObjStr, Products.class);
+			String status = consoleService.tempDeleteProduct(product);
+			if(status.equals("false"))
+				return JsonUtils.errorResponse("unable to archive product").toString();
+			
+			jsonObject.addProperty("success", status);
+			jsonObject.addProperty("data", "archive successfully");
+			return jsonObject.toString();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		return JsonObject.toString();
+		return jsonObject.toString();
 	}
-
+	
 	@RequestMapping(value = "/delete/product", method = RequestMethod.POST)
 	@ResponseBody
-	public String deleteProduct(@RequestBody String productIdObj) {
-		JsonObject JsonObject = new JsonObject();
-		JsonObject.addProperty("data", "Error to delete product");
-		JsonObject.addProperty("success", false);
+	public String deleteProduct(@RequestBody String productObjStr) {
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("data", "Error to delete product");
+		jsonObject.addProperty("success", false);
 		try {
-			JsonObject status = consoleService.deleteProduct(productIdObj);
+			Products product = new Gson().fromJson(productObjStr, Products.class);
+			String status = consoleService.deleteProduct(product);
 			return status.toString();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		return JsonObject.toString();
-	}*/	
+		return jsonObject.toString();
+	}
+	/*Product End*/
 }

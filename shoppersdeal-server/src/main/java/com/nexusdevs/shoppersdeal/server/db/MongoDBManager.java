@@ -95,14 +95,11 @@ public class MongoDBManager {
 	}
 
 	// give negative value of n to get all results
-	public List<Document> getObjects(String collectionName, int startPos, int n, Map<String, Object> queryParams,
-			Map<String, Object> sortingKey) {
-
+	public List<Document> getObjects(String collectionName, int startPos, int n, Map<String, Object> queryParams, Map<String, Object> sortingKey) {
 		return getObjects(collectionName, startPos, n, queryParams, null, sortingKey);
 	}
 
-	public List<Document> getObjects(String collectionName, int startPos, int n, Map<String, Object> queryParams,
-			List<String> fields, Map<String, Object> sortingKey) {
+	public List<Document> getObjects(String collectionName, int startPos, int n, Map<String, Object> queryParams, List<String> fields, Map<String, Object> sortingKey) {
 		List<Document> objList = new ArrayList<Document>();
 		if (startPos < 0) {
 			return objList;
@@ -154,13 +151,11 @@ public class MongoDBManager {
 		}
 		return false;
 	}
-
 	public boolean deleteObject(String collectionName, Map<String, Object> queryParams) {
 		try {
 			MongoCollection<Document> collection = getDB().getCollection(collectionName);
 			Document findOneAndDelete = collection.findOneAndDelete(new Document(queryParams));
 			return findOneAndDelete != null;
-
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
@@ -265,8 +260,7 @@ public class MongoDBManager {
 		return objList;
 	}
 
-	public void addToFields(String collectionName, Map<String, Object> queryParams,
-			Map<String, ? extends Number> numbersToAdd, boolean multi) {
+	public void addToFields(String collectionName, Map<String, Object> queryParams, Map<String, ? extends Number> numbersToAdd, boolean multi) {
 		MongoCollection<Document> collection = getDB().getCollection(collectionName);
 		if (collection == null) {
 			return;

@@ -5,24 +5,26 @@ import java.util.List;
 import com.nexusdevs.shoppersdeal.server.common.DealCategory;
 
 public class Products {
-	
+
 	private String id;
-	private String pId;
-	private String p_name;
-	private String comp_name;
+	private String productId;
+	private String productName;
+	private String compName;
 	private Float price;
-	private Float disc_price;
-	private Float price_diff;
+	private Float discPrice;
+	private Float priceDiff;
 	private String summary;
 	private List<Articles> article;
 	private List<Rating> rating;
 	private Boolean availability;
 	private Float quantity;
 	private List<String> images;
-	private List<String> p_category;
-	private List<String> p_subCategory;
+	private List<String> productCategory;
+	private List<String> productSubCategory;
 	private List<String> tags;
-	private DealCategory deal_category;
+	private DealCategory dealCategory;
+	private long createTime;
+	private long updateTime;
 	private boolean deleted;
 
 	public String getId() {
@@ -33,28 +35,28 @@ public class Products {
 		this.id = id;
 	}
 
-	public String getpId() {
-		return pId;
+	public String getProductId() {
+		return productId;
 	}
 
-	public void setpId(String pId) {
-		this.pId = pId;
+	public void setProductId(String productId) {
+		this.productId = productId;
 	}
 
-	public String getP_name() {
-		return p_name;
+	public String getProductName() {
+		return productName;
 	}
 
-	public void setP_name(String p_name) {
-		this.p_name = p_name;
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 
-	public String getComp_name() {
-		return comp_name;
+	public String getCompName() {
+		return compName;
 	}
 
-	public void setComp_name(String comp_name) {
-		this.comp_name = comp_name;
+	public void setCompName(String compName) {
+		this.compName = compName;
 	}
 
 	public Float getPrice() {
@@ -65,20 +67,20 @@ public class Products {
 		this.price = price;
 	}
 
-	public Float getDisc_price() {
-		return disc_price;
+	public Float getDiscPrice() {
+		return discPrice;
 	}
 
-	public void setDisc_price(Float disc_price) {
-		this.disc_price = disc_price;
+	public void setDiscPrice(Float discPrice) {
+		this.discPrice = discPrice;
 	}
 
-	public Float getPrice_diff() {
-		return price_diff;
+	public Float getPriceDiff() {
+		return priceDiff;
 	}
 
-	public void setPrice_diff(Float price_diff) {
-		this.price_diff = price_diff;
+	public void setPriceDiff(Float priceDiff) {
+		this.priceDiff = priceDiff;
 	}
 
 	public String getSummary() {
@@ -129,20 +131,20 @@ public class Products {
 		this.images = images;
 	}
 
-	public List<String> getP_category() {
-		return p_category;
+	public List<String> getProductCategory() {
+		return productCategory;
 	}
 
-	public void setP_category(List<String> p_category) {
-		this.p_category = p_category;
+	public void setProductCategory(List<String> productCategory) {
+		this.productCategory = productCategory;
 	}
 
-	public List<String> getP_subCategory() {
-		return p_subCategory;
+	public List<String> getProductSubCategory() {
+		return productSubCategory;
 	}
 
-	public void setP_subCategory(List<String> p_subCategory) {
-		this.p_subCategory = p_subCategory;
+	public void setProductSubCategory(List<String> productSubCategory) {
+		this.productSubCategory = productSubCategory;
 	}
 
 	public List<String> getTags() {
@@ -153,12 +155,28 @@ public class Products {
 		this.tags = tags;
 	}
 
-	public DealCategory getDeal_category() {
-		return deal_category;
+	public DealCategory getDealCategory() {
+		return dealCategory;
 	}
 
-	public void setDeal_category(DealCategory deal_category) {
-		this.deal_category = deal_category;
+	public void setDealCategory(DealCategory dealCategory) {
+		this.dealCategory = dealCategory;
+	}
+
+	public long getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(long createTime) {
+		this.createTime = createTime;
+	}
+
+	public long getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(long updateTime) {
+		this.updateTime = updateTime;
 	}
 
 	public boolean isDeleted() {
@@ -167,5 +185,6 @@ public class Products {
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
-	}	
+	}
+
 }

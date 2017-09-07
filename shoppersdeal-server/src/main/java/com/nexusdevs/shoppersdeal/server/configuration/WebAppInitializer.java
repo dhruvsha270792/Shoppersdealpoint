@@ -9,9 +9,8 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-public class WebAppInitializer extends WebMvcConfigurerAdapter implements WebApplicationInitializer {
+public class WebAppInitializer implements WebApplicationInitializer {
 	
 	private String TMP_Folder = "";
 	private int MAX_UPLOAD_SIZE = 5 * 1024 * 1024;

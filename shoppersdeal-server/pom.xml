@@ -9,6 +9,7 @@
 	<url>http://maven.apache.org</url>
 
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.version>4.2.1.RELEASE</spring.version>
 		<hibernate.version>5.2.10.Final</hibernate.version>
 		<environment>dev</environment>
@@ -30,6 +31,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
+				<version>3.0.0</version>
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 					<warName>${war-name}</warName>
