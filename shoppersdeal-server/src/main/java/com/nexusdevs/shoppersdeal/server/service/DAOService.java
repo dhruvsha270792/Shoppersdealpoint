@@ -17,6 +17,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.util.JSON;
 import com.nexusdevs.shoppersdeal.server.db.MongoDBManager;
 import com.nexusdevs.shoppersdeal.server.dto.Category;
+import com.nexusdevs.shoppersdeal.server.dto.ConsoleUser;
 import com.nexusdevs.shoppersdeal.server.dto.Products;
 import com.nexusdevs.shoppersdeal.server.dto.SubCategory;
 import com.nexusdevs.shoppersdeal.server.dto.User;
@@ -33,6 +34,8 @@ public class DAOService {
 	private static String CATEGORY_COLLECTION = "category";
 	private static String SUBCATEGORY_COLLECTION = "subcategory";
 	private static String PRODUCT_COLLECTION = "product";
+	private static String CONSOLE_USER_COLLECTION = "console_user";
+	private static String CONSOLE_USER_SESSION_COLLECTION = "console_user_session";
 
 	@Autowired
 	private MongoDBManager mongoDBManager;
@@ -76,6 +79,15 @@ public class DAOService {
 		BasicDBObject dbObj = (BasicDBObject) JSON.parse(doc.toJson());
 		Products productObject = new Gson().fromJson(dbObj.toString(), Products.class);
 		return productObject;
+	}
+	
+	//get product from document
+	public ConsoleUser getConsoleUserFromDocument(Document doc) {
+		Object idObj = doc.remove("_id");
+		Object password = doc.remove("hp");
+		BasicDBObject dbObj = (BasicDBObject) JSON.parse(doc.toJson());
+		ConsoleUser consoleUserObject = new Gson().fromJson(dbObj.toString(), ConsoleUser.class);
+		return consoleUserObject;
 	}
 	
 	//create new user
@@ -390,4 +402,64 @@ public class DAOService {
 		queryParams.put("productId", product.getProductId());
 		mongoDBManager.deleteObjects(PRODUCT_COLLECTION, queryParams);
 	}
+	
+	//create new console user
+	public String createConsoleUser(ConsoleUser user) {
+		String userObj = new Gson().toJson(user);
+		String addObject = mongoDBManager.addObject(CONSOLE_USER_COLLECTION, userObj);
+		return addObject;
+	}
+	
+	//get console user detail
+	public ConsoleUser getConsoleUserDetail(String emailId) {
+		Map<String, Object> queryParams = new HashMap<>();
+		queryParams.put("email", emailId);
+		Document document = mongoDBManager.getObject(CONSOLE_USER_COLLECTION, queryParams);
+		if (document == null)
+			return null;
+		ConsoleUser user = getConsoleUserFromDocument(document);
+		return user;
+	}
+	
+	//console user login
+	public ConsoleUser loginConsoleUser(String email, String pass) {
+		try {
+			Map<String, Object> queryParams = new HashMap<>();
+			queryParams.put("email", email);
+			queryParams.put("passcode", pass);
+			Document document = mongoDBManager.getObject(CONSOLE_USER_COLLECTION, queryParams);
+			if (document != null)
+				return getConsoleUserFromDocument(document);
+		}
+		catch (Exception e) {}
+		return null;
+	}
+	
+	//create console user session
+	public void insertConsoleSession(UserSession session) {
+		String sessionObj = new Gson().toJson(session);
+		mongoDBManager.addObject(CONSOLE_USER_SESSION_COLLECTION, sessionObj);
+	}
+	
+	//logout console user session
+	public void logoutConsoleUser(UserSession userSession) {
+		Map<String, Object> queryParams = new HashMap<>();
+		queryParams.put("token", userSession.getToken());
+		Map<String, Object> fieldValueMap = new HashMap<>();
+		fieldValueMap.put("expired", true);
+		mongoDBManager.setField(CONSOLE_USER_SESSION_COLLECTION, queryParams, fieldValueMap, true, true);
+	}
+	
+	//validate console user session
+	public UserSession validateConsoleUser(UserSession userSession) {
+		Map<String, Object> queryParams = new HashMap<>();
+		queryParams.put("userId", userSession.getUserId());
+		queryParams.put("token", userSession.getToken());
+		Document document = mongoDBManager.getObject(CONSOLE_USER_SESSION_COLLECTION, queryParams);
+		if (document == null)
+			return null;
+		
+		return getUserSessionFromDocument(document);
+	}
+	
 }
