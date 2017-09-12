@@ -15,7 +15,7 @@ import com.nexusdevs.shoppersdeal.server.db.MongoDBManager;
 @PropertySource("classpath:app.properties")
 @EnableWebMvc
 public class ApplicationConfiguration {
-
+	
 	@Autowired
 	private Environment env;
 	
@@ -26,4 +26,5 @@ public class ApplicationConfiguration {
 		MongoDBManager mdb = new MongoDBManager(host, db);
 		return mdb;
 	}
+	
 }

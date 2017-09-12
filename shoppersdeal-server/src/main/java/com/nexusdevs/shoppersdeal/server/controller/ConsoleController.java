@@ -30,6 +30,11 @@ public class ConsoleController {
 	@Autowired
 	private ConsoleService consoleService;
 	
+	@RequestMapping(value = "/start")
+	public String startHere() {
+		return "Chal gaya";
+	}
+	
 	@RequestMapping(value = "/register" , method = RequestMethod.POST)
 	public String registerConsoleUser(@RequestBody String userObjStr) {
 		JsonObject JsonObject = new JsonObject();

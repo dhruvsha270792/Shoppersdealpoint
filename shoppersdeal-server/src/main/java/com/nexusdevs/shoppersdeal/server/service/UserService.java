@@ -46,7 +46,7 @@ public class UserService {
 	public JsonObject login(User user) {
 		try {
 			User loginStatus = daoService.login(user.getEmail(), StringUtils.getMD5Hash(user.getPasscode()));
-			if(loginStatus == null || loginStatus.equals(""))
+			if(loginStatus == null)
 				return JsonUtils.errorResponse("Invalid Username/Password");
 			
 			UserSession userSession = createSessionForConsole(loginStatus.getEmail());
@@ -78,7 +78,7 @@ public class UserService {
 	public JsonObject validate(UserSession userSession) {
 		try {
 			UserSession validateStatus = daoService.validate(userSession);
-			if(validateStatus == null || validateStatus.equals(""))
+			if(validateStatus == null)
 				return JsonUtils.errorResponse("not valid");
 			
 			return JsonUtils.successResponse(validateStatus.toString());

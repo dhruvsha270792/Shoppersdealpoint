@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
+<log4j:configuration>
+	<appender name="logAppender" class="org.apache.log4j.rolling.RollingFileAppender">
+        <rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
+            <param name="FileNamePattern" value="apps/logs/shoppersdeal-server.log.%d{yyyy-MM-dd}" />
+        </rollingPolicy>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ssz}[%c{1}]|%m%n" />
+        </layout>
+    </appender>
+
+	<appender name="ASYNC_LOGGER" class="org.apache.log4j.AsyncAppender">
+		<param name="BufferSize" value="1000" />
+		<appender-ref ref="logAppender" />
+	</appender>
+
+	<logger name="com.nexusdevs" additivity="false">
+		<level value="debug" />
+		<appender-ref ref="ASYNC_LOGGER" />
+	</logger>
+	
+	<root>
+		<level value="debug" />
+		<appender-ref ref="ASYNC_LOGGER" />
+	</root>
+</log4j:configuration>

@@ -14,10 +14,10 @@ public class WebAppInitializer implements WebApplicationInitializer {
 	
 	private String TMP_Folder = "";
 	private int MAX_UPLOAD_SIZE = 5 * 1024 * 1024;
-	
+
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
-		servletContext.getServletRegistration("default").addMapping("*.json","*.js","*..html","*.css","*.jpg","*.png","*.gif","*.ico","*.eot","*.svg","*.ttf","*.woff","*.otf","*.woff2","","","","");
+		servletContext.getServletRegistration("default").addMapping("*.json","*.js","*.html","*.css","*.jpg","*.png","*.gif","*.ico","*.eot","*.svg","*.ttf","*.woff","*.otf","*.woff2");
 		servletContext.getServletRegistration("jsp").addMapping("*.jsp");
 		
 		//Create Spring root application context
@@ -37,10 +37,9 @@ public class WebAppInitializer implements WebApplicationInitializer {
 		//Map DispatcherServlet
 		registration.setLoadOnStartup(1);
 		registration.addMapping("/");
-		
 	}
-}
 
+}
 
 
 //Create spring servlet context

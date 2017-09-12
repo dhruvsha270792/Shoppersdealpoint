@@ -53,7 +53,7 @@ public class ConsoleService {
 	public JsonObject loginConsoleUser(ConsoleUser user) {
 		try {
 			ConsoleUser loginStatus = daoService.loginConsoleUser(user.getEmail(), StringUtils.getMD5Hash(user.getHp()));
-			if(loginStatus == null || loginStatus.equals(""))
+			if(loginStatus == null)
 				return JsonUtils.errorResponse("Invalid Username/Password");
 			
 			UserSession userSession = createSessionForConsole(loginStatus.getEmail());
@@ -85,7 +85,7 @@ public class ConsoleService {
 	public JsonObject validateConsoleUser(UserSession userSession) {
 		try {
 			UserSession validateStatus = daoService.validateConsoleUser(userSession);
-			if(validateStatus == null || validateStatus.equals(""))
+			if(validateStatus == null)
 				return JsonUtils.errorResponse("not valid");
 			
 			return JsonUtils.successResponse(validateStatus.toString());
@@ -152,7 +152,7 @@ public class ConsoleService {
 	public String getCategoryDetails(String categoryIdStr){
 		try{
 			Category category = daoService.getCategoryDetails(categoryIdStr);
-			if(category == null || category.equals(""))
+			if(category == null)
 				return JsonUtils.errorResponse("no category found").toString();
 			
 			return new Gson().toJson(category);
@@ -173,7 +173,7 @@ public class ConsoleService {
 			oldCategoryObj.setUpdateTime(System.currentTimeMillis());
 			
 			Category categoryStatus = daoService.updateCategory(oldCategoryObj);
-			if(categoryStatus == null || categoryStatus.equals(""))
+			if(categoryStatus == null)
 				return JsonUtils.errorResponse("error to update category").toString();
 			
 			return new Gson().toJson(oldCategoryObj);
@@ -267,7 +267,7 @@ public class ConsoleService {
 	public String getSubcategoryDetails(SubCategory subCategoryObj) {
 		try{
 			SubCategory subcategory = daoService.getSubcategoryDetails(subCategoryObj);
-			if(subcategory == null || subcategory.equals(""))
+			if(subcategory == null)
 				return JsonUtils.errorResponse("no subcategory found").toString();
 			
 			String subcategoryDetails = new Gson().toJson(subcategory);
@@ -289,7 +289,7 @@ public class ConsoleService {
 			oldSubcategoryObj.setUpdateTime(System.currentTimeMillis());
 			
 			SubCategory subcategoryStatus = daoService.updateSubcategory(oldSubcategoryObj);
-			if(subcategoryStatus == null || subcategoryStatus.equals(""))
+			if(subcategoryStatus == null)
 				return JsonUtils.errorResponse("error to update category").toString();
 			
 			return new Gson().toJson(oldSubcategoryObj);
@@ -385,7 +385,7 @@ public class ConsoleService {
 	public String getProductDetails(Products productObj) {
 		try{
 			Products product = daoService.getProductDetails(productObj);
-			if(product == null || product.equals(""))
+			if(product == null)
 				return JsonUtils.errorResponse("no product found").toString();
 			
 			String productDetails = new Gson().toJson(product);
@@ -431,7 +431,7 @@ public class ConsoleService {
 			oldProductsObj.setUpdateTime(System.currentTimeMillis());
 			
 			Products productStatus = daoService.updateProduct(oldProductsObj);
-			if(productStatus == null || productStatus.equals(""))
+			if(productStatus == null)
 				return JsonUtils.errorResponse("error to update category").toString();
 			
 			return new Gson().toJson(oldProductsObj);
