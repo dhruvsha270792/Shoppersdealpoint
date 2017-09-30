@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +22,7 @@ import com.nexusdevs.shoppersdeal.server.dto.UserSession;
 import com.nexusdevs.shoppersdeal.server.service.ConsoleService;
 import com.nexusdevs.shoppersdeal.server.utils.JsonUtils;
 
+@CrossOrigin
 @Controller
 @RequestMapping("/c")
 public class ConsoleController {
@@ -108,7 +110,7 @@ public class ConsoleController {
 	public String listCategory(@RequestParam(defaultValue = "10") int n, @RequestParam(defaultValue = "0") int pos) {
 		try {
 			String sortField = "createTime";
-			String sortType = "ASCENDING";
+			String sortType = "DESCENDING";
 			int total = 0;
 			JsonArray categories = consoleService.categoryList(n, pos, sortField, sortType);
 			if (categories == null)
