@@ -169,7 +169,7 @@ public class ConsoleService {
 			String oldCategory = getCategoryDetails(category.getCategoryId());
 			Category oldCategoryObj = new Gson().fromJson(oldCategory, Category.class);
 			
-			oldCategoryObj.setCategory(category.getCategory());
+			oldCategoryObj.setCategoryName(category.getCategoryName());
 			oldCategoryObj.setUpdateTime(System.currentTimeMillis());
 			
 			Category categoryStatus = daoService.updateCategory(oldCategoryObj);

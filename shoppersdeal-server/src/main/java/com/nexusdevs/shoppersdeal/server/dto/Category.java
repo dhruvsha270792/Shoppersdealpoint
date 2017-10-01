@@ -4,7 +4,7 @@ public class Category {
 	
 	private String id;
 	private String categoryId;
-	private String category;
+	private String categoryName;
 	private long createTime;
 	private long updateTime;
 	private boolean deleted;
@@ -25,12 +25,12 @@ public class Category {
 		this.categoryId = categoryId;
 	}
 
-	public String getCategory() {
-		return category;
+	public String getCategoryName() {
+		return categoryName;
 	}
 
-	public void setCategory(String category) {
-		this.category = category;
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 
 	public long getCreateTime() {
