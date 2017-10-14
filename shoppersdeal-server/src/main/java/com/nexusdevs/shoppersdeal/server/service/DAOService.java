@@ -265,7 +265,7 @@ public class DAOService {
 		
 		Map<String, Object> queryParams = new HashMap<>();
 		queryParams.put("categoryId", subcategory.getCategoryId());
-		queryParams.put("subCategoryId", subcategory.getSubCategoryId());
+		queryParams.put("subcategoryId", subcategory.getSubcategoryId());
 		
 		Document document = mongoDBManager.getObject(SUBCATEGORY_COLLECTION, queryParams);
 		
@@ -281,7 +281,7 @@ public class DAOService {
 		String json = new Gson().toJson(subcategory);
 		
 		Map<String, Object> queryParam = new HashMap<>();
-		queryParam.put("subCategoryId", subcategory.getSubCategoryId());
+		queryParam.put("subcategoryId", subcategory.getSubcategoryId());
 		
 		Document doc = mongoDBManager.updateObject(SUBCATEGORY_COLLECTION, queryParam, json);
 		
@@ -296,7 +296,7 @@ public class DAOService {
 		
 		Map<String, Object> queryParams = new HashMap<>();
 		queryParams.put("categoryId", subcategory.getCategoryId());
-		queryParams.put("subCategoryId", subcategory.getSubCategoryId());
+		queryParams.put("subcategoryId", subcategory.getSubcategoryId());
 		
 		Map<String, Object> fieldValue = new HashMap<>();
 		fieldValue.put("deleted", true);
@@ -310,7 +310,7 @@ public class DAOService {
 		
 		Map<String, Object> queryParams = new HashMap<>();
 		queryParams.put("categoryId", subcategory.getCategoryId());
-		queryParams.put("subCategoryId", subcategory.getSubCategoryId());
+		queryParams.put("subcategoryId", subcategory.getSubcategoryId());
 		
 		Map<String, Object> fieldValue = new HashMap<>();
 		fieldValue.put("deleted", false);
@@ -324,7 +324,7 @@ public class DAOService {
 		
 		Map<String, Object> queryParams = new HashMap<>();
 		queryParams.put("categoryId", subcategory.getCategoryId());
-		queryParams.put("subCategoryId", subcategory.getSubCategoryId());
+		queryParams.put("subcategoryId", subcategory.getSubcategoryId());
 		mongoDBManager.deleteObjects(SUBCATEGORY_COLLECTION, queryParams);
 	}
 	

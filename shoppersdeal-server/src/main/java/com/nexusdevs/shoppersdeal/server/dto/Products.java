@@ -6,34 +6,21 @@ import com.nexusdevs.shoppersdeal.server.common.DealCategory;
 
 public class Products {
 
-	private String id;
 	private String productId;
+	private List<String> category;
+	private List<String> subcategory;
 	private String productName;
 	private String compName;
 	private Float price;
 	private Float discPrice;
 	private Float priceDiff;
 	private String summary;
-	private List<Articles> article;
-	private List<Rating> rating;
-	private Boolean availability;
-	private Float quantity;
 	private List<String> images;
-	private List<String> productCategory;
-	private List<String> productSubCategory;
 	private List<String> tags;
 	private DealCategory dealCategory;
 	private long createTime;
 	private long updateTime;
 	private boolean deleted;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getProductId() {
 		return productId;
@@ -41,6 +28,22 @@ public class Products {
 
 	public void setProductId(String productId) {
 		this.productId = productId;
+	}
+
+	public List<String> getCategory() {
+		return category;
+	}
+
+	public void setCategory(List<String> category) {
+		this.category = category;
+	}
+
+	public List<String> getSubcategory() {
+		return subcategory;
+	}
+
+	public void setSubcategory(List<String> subcategory) {
+		this.subcategory = subcategory;
 	}
 
 	public String getProductName() {
@@ -91,60 +94,12 @@ public class Products {
 		this.summary = summary;
 	}
 
-	public List<Articles> getArticle() {
-		return article;
-	}
-
-	public void setArticle(List<Articles> article) {
-		this.article = article;
-	}
-
-	public List<Rating> getRating() {
-		return rating;
-	}
-
-	public void setRating(List<Rating> rating) {
-		this.rating = rating;
-	}
-
-	public Boolean getAvailability() {
-		return availability;
-	}
-
-	public void setAvailability(Boolean availability) {
-		this.availability = availability;
-	}
-
-	public Float getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(Float quantity) {
-		this.quantity = quantity;
-	}
-
 	public List<String> getImages() {
 		return images;
 	}
 
 	public void setImages(List<String> images) {
 		this.images = images;
-	}
-
-	public List<String> getProductCategory() {
-		return productCategory;
-	}
-
-	public void setProductCategory(List<String> productCategory) {
-		this.productCategory = productCategory;
-	}
-
-	public List<String> getProductSubCategory() {
-		return productSubCategory;
-	}
-
-	public void setProductSubCategory(List<String> productSubCategory) {
-		this.productSubCategory = productSubCategory;
 	}
 
 	public List<String> getTags() {
@@ -186,5 +141,4 @@ public class Products {
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
-
 }

@@ -133,7 +133,14 @@ public class ConsoleService {
 	
 	public String addCategory(Category category) {
 		try {
-			category.setCategoryId("cat_"+System.currentTimeMillis());
+			String systemTimeStr = String.valueOf(System.currentTimeMillis());
+			String idA = systemTimeStr.substring(0, 4).concat(category.getCategoryName().substring(3, 4).toUpperCase());
+			String idB = systemTimeStr.substring(4, 7).concat(category.getCategoryName().substring(2, 3).toUpperCase());
+			String idC = systemTimeStr.substring(7, 10).concat(category.getCategoryName().substring(1, 2).toUpperCase());
+			String idD = systemTimeStr.substring(10,13).concat(category.getCategoryName().substring(0, 1).toUpperCase());
+			String categoryId = idA.concat(idB).concat(idC).concat(idD);
+			System.out.println(categoryId);
+			category.setCategoryId(categoryId);
 			category.setCreateTime(System.currentTimeMillis());
 			category.setUpdateTime(0);
 			category.setDeleted(false);
@@ -248,7 +255,15 @@ public class ConsoleService {
 	
 	public String addSubcategory(SubCategory subcategory) {
 		try {
-			subcategory.setSubCategoryId("subcat_"+System.currentTimeMillis());
+			
+			String systemTimeStr = String.valueOf(System.currentTimeMillis());
+			String idA = systemTimeStr.substring(0, 4).concat(subcategory.getSubcategoryName().substring(3, 4).toUpperCase());
+			String idB = systemTimeStr.substring(4, 7).concat(subcategory.getSubcategoryName().substring(2, 3).toUpperCase());
+			String idC = systemTimeStr.substring(7, 10).concat(subcategory.getSubcategoryName().substring(1, 2).toUpperCase());
+			String idD = systemTimeStr.substring(10, 13).concat(subcategory.getSubcategoryName().substring(0, 1).toUpperCase());
+			String subcategoryId = idA.concat(idB).concat(idC).concat(idD);
+			
+			subcategory.setSubcategoryId(subcategoryId);
 			subcategory.setCreateTime(System.currentTimeMillis());
 			subcategory.setUpdateTime(0);
 			subcategory.setDeleted(false);
@@ -257,7 +272,7 @@ public class ConsoleService {
 			if(subcategoryStatus == null || subcategoryStatus.equals(""))
 				return JsonUtils.errorResponse("error to create subcategory").toString();
 			
-			return new Gson().toJson(subcategory).toString();
+			return JsonUtils.successResponse(subcategoryId).toString();
 		}
 		catch(Exception e) {}
 		return JsonUtils.errorResponse("error to create subcategory").toString();
@@ -279,13 +294,13 @@ public class ConsoleService {
 		return JsonUtils.errorResponse("error in get subcategory details").toString();
 	}
 	
-	
 	public String updateSubcategory(SubCategory subcategory) {
 		try {
 			String oldSubcategory = getSubcategoryDetails(subcategory);
 			SubCategory oldSubcategoryObj = new Gson().fromJson(oldSubcategory, SubCategory.class);
 			
-			oldSubcategoryObj.setSubcategory(subcategory.getSubcategory());
+			oldSubcategoryObj.setCategoryId(subcategory.getCategoryId());
+			oldSubcategoryObj.setSubcategoryName(subcategory.getSubcategoryName());
 			oldSubcategoryObj.setUpdateTime(System.currentTimeMillis());
 			
 			SubCategory subcategoryStatus = daoService.updateSubcategory(oldSubcategoryObj);
@@ -297,7 +312,6 @@ public class ConsoleService {
 		catch(Exception e) {}
 		return JsonUtils.errorResponse("error to update subcategory").toString();
 	}
-	
 	
 	public String archiveSubcategory(SubCategory subCategoryObj){
 		try{
@@ -366,7 +380,6 @@ public class ConsoleService {
 	public String addProduct(Products product) {
 		try {
 			product.setProductId(StringUtils.getSaltString());
-			product.setRating(new ArrayList<Rating>());
 			product.setCreateTime(System.currentTimeMillis());
 			product.setUpdateTime(0);
 			product.setDeleted(false);
@@ -410,23 +423,18 @@ public class ConsoleService {
 			oldProductsObj.setPriceDiff(product.getPriceDiff());
 			oldProductsObj.setSummary(product.getSummary());
 			
-			if(product.getArticle() != null)
-				oldProductsObj.setArticle(product.getArticle());
-			
 			if(product.getImages() != null)
 				oldProductsObj.setImages(product.getImages());
 			
-			if(product.getProductCategory() != null)
-				oldProductsObj.setProductCategory(product.getProductCategory());
+			if(product.getCategory() != null)
+				oldProductsObj.setCategory(product.getCategory());
 			
-			if(product.getProductSubCategory() != null)
-				oldProductsObj.setProductSubCategory(product.getProductSubCategory());
+			if(product.getSubcategory() != null)
+				oldProductsObj.setSubcategory(product.getSubcategory());
 			
 			if(product.getTags() != null)
 				oldProductsObj.setTags(product.getTags());
 			
-			oldProductsObj.setAvailability(product.getAvailability());
-			oldProductsObj.setQuantity(product.getQuantity());
 			oldProductsObj.setDealCategory(product.getDealCategory());
 			oldProductsObj.setUpdateTime(System.currentTimeMillis());
 			
