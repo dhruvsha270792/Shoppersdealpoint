@@ -1,0 +1,94 @@
+<nav data-ng-controller="mainController">
+	<div class="container" data-ng-init="showCategory();">
+		<div class="row">
+			<div class="col-md-3 col-sm-4">
+				<div class="mm-toggle-wrap">
+					<div class="mm-toggle">
+						<i class="fa fa-align-justify"></i>
+					</div>
+					<span class="mm-label">Categories</span>
+				</div>
+				<div class="mega-container visible-lg visible-md visible-sm">
+					<div class="navleft-container">
+						<div class="mega-menu-title">
+							<h3>Shop by category</h3>
+						</div>
+						<div class="mega-menu-category">
+							<ul class="nav" ng-repeat="category in categoryList">
+								<li>
+									<a ng-mouseover="getSubcategoryList(category.categoryId)">{{category.categoryName}}</a>
+									<div class="wrap-popup">
+										<div class="popup">
+											<div class="row">
+												<div class="col-md-4 col-sm-6">
+													<ul class="nav">
+														<li data-ng-repeat="subcategoryLeft in subcategoryListLeft">
+															<a href="">
+																<span>{{subcategoryLeft.subcategoryName}}</span>
+															</a>
+														</li>
+													</ul>
+												</div>
+												<div class="col-md-4 col-sm-6 has-sep">
+													<ul class="nav">
+														<li data-ng-repeat="subcategoryRight in subcategoryListRight">
+															<a href="">
+																<span>{{subcategoryRight.subcategoryName}}</span>
+															</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-9 col-sm-8">
+				<div class="mtmegamenu">
+					<ul>
+						<li class="mt-root demo_custom_link_cms">
+							<div class="mt-root-item">
+								<a ui-sref="home">
+									<div class="title title_font">
+										<span class="title-text">Home</span>
+									</div>
+								</a>
+							</div>
+						</li>
+						<li class="mt-root">
+							<div class="mt-root-item">
+								<a ui-sref="hotdeals">
+									<div class="title title_font">
+										<span class="title-text">Deals</span>
+									</div>
+								</a>
+							</div>
+						</li>
+						<li class="mt-root">
+							<div class="mt-root-item">
+								<a ui-sref="trackOrder">
+									<div class="title title_font">
+										<span class="title-text">Track Your Order</span>
+									</div>
+								</a>
+							</div>
+						</li>
+						<li class="mt-root">
+							<div class="mt-root-item">
+								<a ui-sref="customerService">
+									<div class="title title_font">
+										<span class="title-text">Customer Service</span>
+									</div>
+								</a>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</nav>

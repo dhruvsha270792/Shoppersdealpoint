@@ -20,6 +20,7 @@ import com.nexusdevs.shoppersdeal.server.dto.Products;
 import com.nexusdevs.shoppersdeal.server.dto.SubCategory;
 import com.nexusdevs.shoppersdeal.server.dto.UserSession;
 import com.nexusdevs.shoppersdeal.server.service.ConsoleService;
+import com.nexusdevs.shoppersdeal.server.service.ProductService;
 import com.nexusdevs.shoppersdeal.server.utils.JsonUtils;
 
 @CrossOrigin
@@ -32,10 +33,8 @@ public class ConsoleController {
 	@Autowired
 	private ConsoleService consoleService;
 	
-	@RequestMapping(value = "/start")
-	public String startHere() {
-		return "Chal gaya";
-	}
+	@Autowired
+	private ProductService productService;
 	
 	@RequestMapping(value = "/register" , method = RequestMethod.POST)
 	public String registerConsoleUser(@RequestBody String userObjStr) {
@@ -470,4 +469,56 @@ public class ConsoleController {
 		return jsonObject.toString();
 	}
 	/*Product End*/
+	
+	
+	@RequestMapping(value = "/shop")
+	@ResponseBody
+	public String getShopList(
+			@RequestParam(defaultValue = "20") int n,
+			@RequestParam(defaultValue = "0") int pos,
+			@RequestParam(required=false) String categoryId,
+			@RequestParam(required=false) String subcategoryId
+			) {
+		try {
+			JsonArray shopList = productService.getShopList(n, pos, categoryId, subcategoryId);
+			return shopList.toString();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return JsonUtils.errorResponse("no data found").toString();
+	}
+	
+	@RequestMapping(value = "/hotdeals")
+	@ResponseBody
+	public String getHotdealList(
+			@RequestParam(defaultValue = "20") int n,
+			@RequestParam(defaultValue = "0") int pos,
+			@RequestParam(required=false) String categoryId,
+			@RequestParam(required=false) String subcategoryId
+			) {
+		try {
+			JsonArray shopList = productService.getHotdealList(n, pos, categoryId, subcategoryId);
+			return shopList.toString();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return JsonUtils.errorResponse("no data found").toString();
+	}
+	
+	@RequestMapping(value = "/topRated")
+	@ResponseBody
+	public String getTopRatedList(
+			@RequestParam(defaultValue = "20") int n,
+			@RequestParam(defaultValue = "0") int pos,
+			@RequestParam(required=false) String categoryId,
+			@RequestParam(required=false) String subcategoryId
+			) {
+		try {
+			JsonArray topRatedList = productService.getTopRatedList(n, pos, categoryId, subcategoryId);
+			return topRatedList.toString();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return JsonUtils.errorResponse("no data found").toString();
+	}
 }

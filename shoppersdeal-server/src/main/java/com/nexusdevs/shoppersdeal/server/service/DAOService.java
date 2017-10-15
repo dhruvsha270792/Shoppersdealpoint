@@ -403,6 +403,108 @@ public class DAOService {
 		mongoDBManager.deleteObjects(PRODUCT_COLLECTION, queryParams);
 	}
 	
+	
+	//get shop list
+	public List<Products> getShopList(int n, int pos, String categoryId, String subcategoryId) {
+		Map<String, Object> queryParams = new HashMap<>();
+		queryParams.put("deleted", false);
+		
+		if(categoryId != null && categoryId.equals("")) {
+			queryParams.put("categoryId", categoryId);
+			
+			if(subcategoryId != null && subcategoryId.equals("")) {
+				queryParams.put("subcategoryId", subcategoryId);
+			}
+		}
+		
+		String sF = null;
+		String sT = null;
+		Map<String, Object> sortingKey = new HashMap<>();
+		if (sF != null) {
+			int sort = -1;
+			if (sT.equalsIgnoreCase("ASC")) {
+				sort = 1;
+			}
+			sortingKey.put(sF, sort);
+		}
+		
+		List<Document> objects = mongoDBManager.getObjects(PRODUCT_COLLECTION, pos, n, queryParams, sortingKey);
+		if (objects != null) {
+			List<Products> list = objects.stream().map(o -> getProductFromDocument(o)).collect(Collectors.toList());
+			return list;
+		}
+		return Collections.emptyList();
+	}
+	
+	
+	//get hotdeals list
+	public List<Products> getHotdealList(int n, int pos, String categoryId, String subcategoryId) {
+		Map<String, Object> queryParams = new HashMap<>();
+		queryParams.put("deleted", false);
+		queryParams.put("dealCategory", "hotDeals");
+		
+		if(categoryId != null && categoryId.equals("")) {
+			queryParams.put("categoryId", categoryId);
+			
+			if(subcategoryId != null && subcategoryId.equals("")) {
+				queryParams.put("subcategoryId", subcategoryId);
+			}
+		}
+		
+		String sF = null;
+		String sT = null;
+		Map<String, Object> sortingKey = new HashMap<>();
+		if (sF != null) {
+			int sort = -1;
+			if (sT.equalsIgnoreCase("ASC")) {
+				sort = 1;
+			}
+			sortingKey.put(sF, sort);
+		}
+		
+		List<Document> objects = mongoDBManager.getObjects(PRODUCT_COLLECTION, pos, n, queryParams, sortingKey);
+		if (objects != null) {
+			List<Products> list = objects.stream().map(o -> getProductFromDocument(o)).collect(Collectors.toList());
+			return list;
+		}
+		return Collections.emptyList();
+	}
+	
+	
+	//get top rated list
+	public List<Products> getTopRatedList(int n, int pos, String categoryId, String subcategoryId) {
+		Map<String, Object> queryParams = new HashMap<>();
+		queryParams.put("deleted", false);
+		queryParams.put("dealCategory", "topRated");
+		
+		if(categoryId != null && categoryId.equals("")) {
+			queryParams.put("categoryId", categoryId);
+			
+			if(subcategoryId != null && subcategoryId.equals("")) {
+				queryParams.put("subcategoryId", subcategoryId);
+			}
+		}
+		
+		String sF = null;
+		String sT = null;
+		Map<String, Object> sortingKey = new HashMap<>();
+		if (sF != null) {
+			int sort = -1;
+			if (sT.equalsIgnoreCase("ASC")) {
+				sort = 1;
+			}
+			sortingKey.put(sF, sort);
+		}
+		
+		List<Document> objects = mongoDBManager.getObjects(PRODUCT_COLLECTION, pos, n, queryParams, sortingKey);
+		if (objects != null) {
+			List<Products> list = objects.stream().map(o -> getProductFromDocument(o)).collect(Collectors.toList());
+			return list;
+		}
+		return Collections.emptyList();
+	}
+	
+	
 	//create new console user
 	public String createConsoleUser(ConsoleUser user) {
 		String userObj = new Gson().toJson(user);

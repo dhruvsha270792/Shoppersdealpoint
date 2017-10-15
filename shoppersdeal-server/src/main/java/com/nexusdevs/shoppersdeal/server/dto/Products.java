@@ -13,7 +13,6 @@ public class Products {
 	private String compName;
 	private Float price;
 	private Float discPrice;
-	private Float priceDiff;
 	private String summary;
 	private List<String> images;
 	private List<String> tags;
@@ -76,14 +75,6 @@ public class Products {
 
 	public void setDiscPrice(Float discPrice) {
 		this.discPrice = discPrice;
-	}
-
-	public Float getPriceDiff() {
-		return priceDiff;
-	}
-
-	public void setPriceDiff(Float priceDiff) {
-		this.priceDiff = priceDiff;
 	}
 
 	public String getSummary() {

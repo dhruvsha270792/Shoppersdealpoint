@@ -4,8 +4,7 @@ jQuery(document).ready(function() {
 
 /******************************************
    Newsletter popup
-******************************************/
- 
+******************************************
   jQuery('#myModal').appendTo("body");
           function show_modal(){
             jQuery('#myModal').modal('show');
@@ -109,9 +108,9 @@ jQuery("#featured-slider .slider-items").owlCarousel({
 
 /******************************************
 	Mobile menu
-******************************************/
+******************************************
 
-	jQuery("#mobile-menu").mobileMenu({
+	$("#mobile-menu").mobileMenu({
 		MenuWidth: 250,
 		SlideSpeed: 300,
 		WindowsMaxWidth: 767,
@@ -125,15 +124,15 @@ jQuery("#featured-slider .slider-items").owlCarousel({
 
 /******************************************
 	Mega Menu
-******************************************/
+******************************************
 
-	jQuery('.mega-menu-title').on('click', function() {
-		if (jQuery('.mega-menu-category').is(':visible')) {
-			jQuery('.mega-menu-category').slideUp();
-		} else {
-			jQuery('.mega-menu-category').slideDown();
-		}
-	});
+jQuery('.mega-menu-title').on('click', function() {
+	if (jQuery('.mega-menu-category').is(':visible')) {
+		jQuery('.mega-menu-category').slideUp();
+	} else {
+		jQuery('.mega-menu-category').slideDown();
+	}
+});
 
 
 jQuery('.mega-menu-category .nav > li').hover(function() {

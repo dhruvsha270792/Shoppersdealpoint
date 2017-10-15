@@ -420,7 +420,6 @@ public class ConsoleService {
 			oldProductsObj.setCompName(product.getCompName());
 			oldProductsObj.setPrice(product.getPrice());
 			oldProductsObj.setDiscPrice(product.getDiscPrice());
-			oldProductsObj.setPriceDiff(product.getPriceDiff());
 			oldProductsObj.setSummary(product.getSummary());
 			
 			if(product.getImages() != null)

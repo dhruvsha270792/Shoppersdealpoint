@@ -1,0 +1,353 @@
+<!-- main container -->
+<div class="main-container col1-layout" ng-controller="mainController">
+	<div class="container">
+		<div class="row">
+
+			<!-- Home Tabs  -->
+			<div class="col-sm-8 col-md-9 col-xs-12" data-ng-init="getTopRatedList();">
+				<div class="home-tab">
+					<ul class="nav home-nav-tabs home-product-tabs">
+						<li class="active"><a href="#topRated" aria-expanded="false">Top Rated</a></li>
+					</ul>
+					<div id="productTabContent" class="tab-content">
+						<div class="tab-pane active in" id="featured">
+							<div class="featured-pro">
+								<div class="slider-items-products">
+									<div id="featured-slider" class="product-flexslider hidden-buttons">
+										<div class="slider-items slider-width-col4">
+											<div class="product-item" data-ng-repeat="topRated in topRatedList">
+												<div class="item-inner">
+													<div class="product-thumbnail">
+														<div class="icon-sale-label sale-left">Sale</div>
+														<div class="icon-new-label new-right">New</div>
+														<div class="pr-img-area">
+															<a title="" href="">
+																<figure>
+																	<img class="first-img" src="{{topRated.images[2]}}" alt="">
+																	<img class="hover-img" src="{{topRated.images[3]}}" alt="">
+																</figure>
+															</a>
+															<button type="button" class="add-to-cart-mt">
+																<i class="fa fa-shopping-cart"></i>
+																<span> Add to Cart</span>
+															</button>
+														</div>
+														<div class="pr-info-area">
+															<div class="pr-button">
+																<div class="mt-button add_to_wishlist">
+																	<a href="">
+																	<i class="fa fa-heart"></i></a>
+																</div>
+																<div class="mt-button add_to_compare">
+																	<a href=""><i class="fa fa-signal"></i></a>
+																</div>
+																<div class="mt-button quick-view">
+																	<a href=""><i class="fa fa-search"></i></a>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="item-info">
+														<div class="info-inner">
+															<div class="item-title">
+																<a title="" href="">{{topRated.productName}}</a>
+															</div>
+															<div class="item-content">
+																<div class="rating">
+																	<i class="fa fa-star"></i>
+																	<i class="fa fa-star"></i>
+																	<i class="fa fa-star"></i>
+																	<i class="fa fa-star"></i>
+																	<i class="fa fa-star-o"></i>
+																</div>
+																<div class="item-price">
+																	<div class="price-box">
+																		<span class="regular-price">
+																			<span class="price">&#8377; {{topRated.price}}</span>
+																		</span>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--Hot deal -->
+			<div class="col-md-3 col-sm-4 col-xs-12 hot-products" data-ng-init="getHotdeals();">
+				<div class="hot-deal">
+					<span class="title-text">Hot deal</span>
+					<ul class="products-grid">
+						<li class="item">
+							<div class="product-item">
+								<div class="item-inner">
+									<div class="product-thumbnail">
+										<div class="icon-hot-label hot-right">Hot</div>
+										<div class="pr-img-area">
+											<a title="" href="">
+												<figure>
+													<img class="first-img" src="{{hotDealList[0].images[0]}}" alt="">
+													<img class="hover-img" src="{{hotDealList[0].images[1]}}" alt="">
+												</figure>
+											</a>
+											<button type="button" class="add-to-cart-mt">
+												<i class="fa fa-shopping-cart"></i><span> Add to Cart</span>
+											</button>
+										</div>
+										<div class="jtv-box-timer">
+											<div class="countbox_1 jtv-timer-grid"></div>
+										</div>
+										<div class="pr-info-area">
+											<div class="pr-button">
+												<div class="mt-button add_to_wishlist">
+													<a href="">
+														<i class="fa fa-heart"></i>
+													</a>
+												</div>
+												<div class="mt-button add_to_compare">
+													<a href="">
+														<i class="fa fa-signal"></i>
+													</a>
+												</div>
+												<div class="mt-button quick-view">
+													<a href="">
+														<i class="fa fa-search"></i>
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="item-info">
+										<div class="info-inner">
+											<div class="item-title">
+												<a title="" href="">{{hotDealList[0].productName}}</a>
+											</div>
+											<div class="item-content">
+												<div class="rating">
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star-o"></i>
+													<i class="fa fa-star-o"></i>
+													<i class="fa fa-star-o"></i>
+												</div>
+												<div class="item-price">
+													<div class="price-box">
+														<span class="regular-price">
+															<span class="price">&#8377; {{hotDealList[0].price}}</span>
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end main container -->
+
+<!-- top banner -->
+<div class="banner-static">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-4 col-sms-12">
+				<div class="banner-box banner-box2">
+					<a href=""><img src="./assets/images/banner_staic2.png" alt=""></a>
+					<div class="box-hover">
+						<div class="banner-title">Fresh Strawberry</div>
+						<span>Save up to 55% off</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4 col-sms-12">
+				<div class="banner-box banner-box1">
+					<a href=""><img src="./assets/images/banner_staic1.png" alt=""></a>
+					<div class="box-hover">
+						<div class="banner-title">Healthy Summer</div>
+						<span>Save up to 45% off</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4 col-sms-12">
+				<div class="banner-box banner-box3">
+					<a href=""><img src="./assets/images/banner_staic3.png" alt=""></a>
+					<div class="box-hover">
+						<div class="banner-title">Fresh Salads</div>
+						<span>Welcome to Foodstore!</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--special-products-->
+<div class="container">
+	<div class="special-products">
+		<div class="page-header">
+			<h2>Special Products</h2>
+		</div>
+		<div class="special-products-pro">
+			<div class="slider-items-products">
+				<div id="special-products-slider"
+					class="product-flexslider hidden-buttons">
+					<div class="slider-items slider-width-col4">
+						<div class="product-item">
+							<div class="item-inner">
+								<div class="product-thumbnail">
+									<div class="icon-sale-label sale-left">Sale</div>
+									<div class="icon-new-label new-right">New</div>
+									<div class="pr-img-area">
+										<a title="" href="">
+											<figure>
+												<img class="first-img" src="https://haldwanigrocers.com/media/catalog/product/cache/4/image/430x389.100257069/85e4522595efc69f496374d01ef2bf13/a/p/apple.png" alt="">
+												<img class="hover-img" src="https://haldwanigrocers.com/media/catalog/product/cache/4/image/430x389.100257069/85e4522595efc69f496374d01ef2bf13/a/p/apple.png" alt="">
+											</figure>
+										</a>
+										<button type="button" class="add-to-cart-mt">
+											<i class="fa fa-shopping-cart"></i><span> Add to Cart</span>
+										</button>
+									</div>
+									<div class="pr-info-area">
+										<div class="pr-button">
+											<div class="mt-button add_to_wishlist">
+												<a href="">
+													<i class="fa fa-heart"></i>
+												</a>
+											</div>
+											<div class="mt-button add_to_compare">
+												<a href="">
+													<i class="fa fa-signal"></i>
+												</a>
+											</div>
+											<div class="mt-button quick-view">
+												<a href="">
+													<i class="fa fa-search"></i>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="item-info">
+									<div class="info-inner">
+										<div class="item-title">
+											<a title="" href="">Kashmiri Apples</a>
+										</div>
+										<div class="item-content">
+											<div class="rating">
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star-o"></i>
+												<i class="fa fa-star-o"></i>
+												<i class="fa fa-star-o"></i>
+											</div>
+											<div class="item-price">
+												<div class="price-box">
+													<span class="regular-price">
+														<span class="price">325.00 /KG</span>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="top-banner">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="jtv-banner1">
+					<a href=""><img src="./assets/images/sub2.jpg" alt=""></a>
+					<div class="hover_content">
+						<div class="hover_data">
+							<div class="title">Season sale</div>
+							<div class="desc-text">offer</div>
+							<div class="shop-now">
+								<a href="#">Shop now</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="jtv-banner2">
+					<a href=""><img src="./assets/images/sub3.jpg" alt=""></a>
+					<div class="hover_content">
+						<div class="hover_data">
+							<div class="title">Best Quality</div>
+							<div class="desc-text">Vegetables Delicious fruit</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="jtv-banner3">
+					<div class="jtv-banner3-inner">
+						<a href=""><img src="./assets/images/sub1.jpg" alt=""></a>
+						<div class="hover_content">
+							<div class="hover_data">
+								<div class="title">Fresh Fruit</div>
+								<div class="desc-text">Delivered to your door</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+
+/******************************************
+***************Featured slider*************
+******************************************/
+$(window).load(function() {
+	$("#featured-slider .slider-items").owlCarousel({
+		items: 3,
+		itemsDesktop: [1024, 3],
+		itemsDesktopSmall: [900, 2],
+		itemsTablet: [640, 2],
+		itemsMobile: [390, 1],
+		navigation: !0,
+		navigationText: ['<a class="flex-prev"></a>', '<a class="flex-next"></a>'],
+		slideSpeed: 500,
+		pagination: !1,
+		autoPlay: false
+	});
+});
+</script>
+<script>
+$(window).load(function() {
+	$("#special-products-slider .slider-items").owlCarousel({
+		items: 4,
+		itemsDesktop: [1024, 4],
+		itemsDesktopSmall: [900, 3],
+		itemsTablet: [640, 2],
+		itemsMobile: [390, 1],
+		navigation: !0,
+		navigationText: ['<a class="flex-prev"></a>', '<a class="flex-next"></a>'],
+		slideSpeed: 500,
+		pagination: !1,
+		autoPlay: false
+	});
+});
+</script>
