@@ -1,6 +1,5 @@
 package com.nexusdevs.shoppersdeal.server.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,7 +15,6 @@ import com.google.gson.JsonParser;
 import com.nexusdevs.shoppersdeal.server.dto.Category;
 import com.nexusdevs.shoppersdeal.server.dto.ConsoleUser;
 import com.nexusdevs.shoppersdeal.server.dto.Products;
-import com.nexusdevs.shoppersdeal.server.dto.Rating;
 import com.nexusdevs.shoppersdeal.server.dto.SubCategory;
 import com.nexusdevs.shoppersdeal.server.dto.UserSession;
 import com.nexusdevs.shoppersdeal.server.utils.JsonUtils;
@@ -133,14 +131,6 @@ public class ConsoleService {
 	
 	public String addCategory(Category category) {
 		try {
-			String systemTimeStr = String.valueOf(System.currentTimeMillis());
-			String idA = systemTimeStr.substring(0, 4).concat(category.getCategoryName().substring(3, 4).toUpperCase());
-			String idB = systemTimeStr.substring(4, 7).concat(category.getCategoryName().substring(2, 3).toUpperCase());
-			String idC = systemTimeStr.substring(7, 10).concat(category.getCategoryName().substring(1, 2).toUpperCase());
-			String idD = systemTimeStr.substring(10,13).concat(category.getCategoryName().substring(0, 1).toUpperCase());
-			String categoryId = idA.concat(idB).concat(idC).concat(idD);
-			System.out.println(categoryId);
-			category.setCategoryId(categoryId);
 			category.setCreateTime(System.currentTimeMillis());
 			category.setUpdateTime(0);
 			category.setDeleted(false);
@@ -149,7 +139,7 @@ public class ConsoleService {
 			if(categoryStatus == null || categoryStatus.equals(""))
 				return JsonUtils.errorResponse("error to create category").toString();
 			
-			return new Gson().toJson(category).toString();
+			return JsonUtils.successResponse(categoryStatus).toString();
 		}
 		catch(Exception e) {}
 		return JsonUtils.errorResponse("error to create category").toString();
@@ -173,13 +163,14 @@ public class ConsoleService {
 	
 	public String updateCategory(Category category) {
 		try {
-			String oldCategory = getCategoryDetails(category.getCategoryId());
+			String oldCategory = getCategoryDetails(category.getId());
 			Category oldCategoryObj = new Gson().fromJson(oldCategory, Category.class);
 			
 			oldCategoryObj.setCategoryName(category.getCategoryName());
 			oldCategoryObj.setUpdateTime(System.currentTimeMillis());
 			
 			Category categoryStatus = daoService.updateCategory(oldCategoryObj);
+			
 			if(categoryStatus == null)
 				return JsonUtils.errorResponse("error to update category").toString();
 			
@@ -188,38 +179,6 @@ public class ConsoleService {
 		catch(Exception e) {}
 		return JsonUtils.errorResponse("error to update category").toString();
 	}
-	
-	
-	public String archiveCategory(String categoryIdStr){
-		try{
-			String category = getCategoryDetails(categoryIdStr);
-			if(category == null || category.equals(""))
-				return JsonUtils.errorResponse("no category found").toString();
-			
-			Boolean temDeleteStatus = daoService.archiveCategory(categoryIdStr);
-			return temDeleteStatus.toString();
-		}
-		catch (Exception e) {
-			logger.error(e.getMessage(),e);
-		}
-		return JsonUtils.errorResponse("error in get category details").toString();
-	}
-	
-	public String unarchiveCategory(String categoryIdStr){
-		try{
-			String category = getCategoryDetails(categoryIdStr);
-			if(category == null || category.equals(""))
-				return JsonUtils.errorResponse("no category found").toString();
-			
-			Boolean temDeleteStatus = daoService.unarchiveCategory(categoryIdStr);
-			return temDeleteStatus.toString();
-		}
-		catch (Exception e) {
-			logger.error(e.getMessage(),e);
-		}
-		return JsonUtils.errorResponse("error in get category details").toString();
-	}
-	
 	
 	public String deleteCategory(String categoryIdStr){
 		try{
@@ -255,15 +214,6 @@ public class ConsoleService {
 	
 	public String addSubcategory(SubCategory subcategory) {
 		try {
-			
-			String systemTimeStr = String.valueOf(System.currentTimeMillis());
-			String idA = systemTimeStr.substring(0, 4).concat(subcategory.getSubcategoryName().substring(3, 4).toUpperCase());
-			String idB = systemTimeStr.substring(4, 7).concat(subcategory.getSubcategoryName().substring(2, 3).toUpperCase());
-			String idC = systemTimeStr.substring(7, 10).concat(subcategory.getSubcategoryName().substring(1, 2).toUpperCase());
-			String idD = systemTimeStr.substring(10, 13).concat(subcategory.getSubcategoryName().substring(0, 1).toUpperCase());
-			String subcategoryId = idA.concat(idB).concat(idC).concat(idD);
-			
-			subcategory.setSubcategoryId(subcategoryId);
 			subcategory.setCreateTime(System.currentTimeMillis());
 			subcategory.setUpdateTime(0);
 			subcategory.setDeleted(false);
@@ -272,14 +222,14 @@ public class ConsoleService {
 			if(subcategoryStatus == null || subcategoryStatus.equals(""))
 				return JsonUtils.errorResponse("error to create subcategory").toString();
 			
-			return JsonUtils.successResponse(subcategoryId).toString();
+			return JsonUtils.successResponse(subcategoryStatus).toString();
 		}
 		catch(Exception e) {}
 		return JsonUtils.errorResponse("error to create subcategory").toString();
 	}
 	
 	
-	public String getSubcategoryDetails(SubCategory subCategoryObj) {
+	public String getSubcategoryDetails(String subCategoryObj) {
 		try{
 			SubCategory subcategory = daoService.getSubcategoryDetails(subCategoryObj);
 			if(subcategory == null)
@@ -296,7 +246,7 @@ public class ConsoleService {
 	
 	public String updateSubcategory(SubCategory subcategory) {
 		try {
-			String oldSubcategory = getSubcategoryDetails(subcategory);
+			String oldSubcategory = getSubcategoryDetails(subcategory.getId());
 			SubCategory oldSubcategoryObj = new Gson().fromJson(oldSubcategory, SubCategory.class);
 			
 			oldSubcategoryObj.setCategoryId(subcategory.getCategoryId());
@@ -313,44 +263,13 @@ public class ConsoleService {
 		return JsonUtils.errorResponse("error to update subcategory").toString();
 	}
 	
-	public String archiveSubcategory(SubCategory subCategoryObj){
+	public String deleteSubcategory(String subCategoryObjId) {
 		try{
-			String subcategory = getSubcategoryDetails(subCategoryObj);
+			String subcategory = getSubcategoryDetails(subCategoryObjId);
 			if(subcategory == null || subcategory.equals(""))
 				return JsonUtils.errorResponse("no subcategory found").toString();
 			
-			Boolean temDeleteStatus = daoService.archiveSubcategory(subCategoryObj);
-			return temDeleteStatus.toString();
-		}
-		catch (Exception e) {
-			logger.error(e.getMessage(),e);
-		}
-		return JsonUtils.errorResponse("error in get subcategory details").toString();
-	}
-	
-	public String unarchiveSubcategory(SubCategory subCategoryObj){
-		try{
-			String subcategory = getSubcategoryDetails(subCategoryObj);
-			if(subcategory == null || subcategory.equals(""))
-				return JsonUtils.errorResponse("no subcategory found").toString();
-			
-			Boolean temDeleteStatus = daoService.unarchiveSubcategory(subCategoryObj);
-			return temDeleteStatus.toString();
-		}
-		catch (Exception e) {
-			logger.error(e.getMessage(),e);
-		}
-		return JsonUtils.errorResponse("error in get subcategory details").toString();
-	}
-	
-	
-	public String deleteSubcategory(SubCategory subCategoryObj) {
-		try{
-			String subcategory = getSubcategoryDetails(subCategoryObj);
-			if(subcategory == null || subcategory.equals(""))
-				return JsonUtils.errorResponse("no subcategory found").toString();
-			
-			daoService.deleteSubcategory(subCategoryObj);
+			daoService.deleteSubcategory(subCategoryObjId);
 			return JsonUtils.successResponse("delete successfully").toString();
 		}
 		catch (Exception e) {
@@ -388,16 +307,16 @@ public class ConsoleService {
 			if(productStatus == null || productStatus.equals(""))
 				return JsonUtils.errorResponse("error to create subcategory").toString();
 			
-			return new Gson().toJson(product).toString();
+			return JsonUtils.successResponse(productStatus).toString();
 		}
 		catch(Exception e) {}
 		return JsonUtils.errorResponse("error to create subcategory").toString();
 	}
 	
 	
-	public String getProductDetails(Products productObj) {
+	public String getProductDetails(String productObjId) {
 		try{
-			Products product = daoService.getProductDetails(productObj);
+			Products product = daoService.getProductDetails(productObjId);
 			if(product == null)
 				return JsonUtils.errorResponse("no product found").toString();
 			
@@ -413,7 +332,7 @@ public class ConsoleService {
 	
 	public String updateProduct(Products product) {
 		try {
-			String oldProduct = getProductDetails(product);
+			String oldProduct = getProductDetails(product.getId());
 			Products oldProductsObj = new Gson().fromJson(oldProduct, Products.class);
 			
 			oldProductsObj.setProductName(product.getProductName());
@@ -441,19 +360,19 @@ public class ConsoleService {
 			if(productStatus == null)
 				return JsonUtils.errorResponse("error to update category").toString();
 			
-			return new Gson().toJson(oldProductsObj);
+			return JsonUtils.successResponse(productStatus.getId()).toString();
 		}
 		catch(Exception e) {}
 		return JsonUtils.errorResponse("error to update subcategory").toString();
 	}
 	
-	public String tempDeleteProduct(Products product){
+	public String tempDeleteProduct(String productId){
 		try{
-			String productObj = getProductDetails(product);
+			String productObj = getProductDetails(productId);
 			if(productObj == null || productObj.equals(""))
 				return JsonUtils.errorResponse("no product found").toString();
 			
-			Boolean temDeleteStatus = daoService.tempDeleteProduct(product);
+			Boolean temDeleteStatus = daoService.tempDeleteProduct(productId);
 			return temDeleteStatus.toString();
 		}
 		catch (Exception e) {
@@ -463,13 +382,13 @@ public class ConsoleService {
 	}
 	
 	
-	public String deleteProduct(Products product) {
+	public String deleteProduct(String productId) {
 		try{
-			String productObj = getProductDetails(product);
+			String productObj = getProductDetails(productId);
 			if(productObj == null || productObj.equals(""))
 				return JsonUtils.errorResponse("no product found").toString();
 			
-			daoService.deleteSubcategory(product);
+			daoService.deleteProduct(productId);
 			return JsonUtils.successResponse("delete successfully").toString();
 		}
 		catch (Exception e) {

@@ -1,5 +1,7 @@
 package com.nexusdevs.shoppersdeal.server.service;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -7,12 +9,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.util.JSON;
 import com.nexusdevs.shoppersdeal.server.db.MongoDBManager;
@@ -57,12 +62,25 @@ public class DAOService {
 		return userSessionObject;
 	}
 	
-	//get category from document
-	public Category getCategoryFromDocument(Document doc) {
+	
+	private <T> T getDocToClass(Document doc, Class<T> klass) {
 		Object idObj = doc.remove("_id");
 		BasicDBObject dbObj = (BasicDBObject) JSON.parse(doc.toJson());
-		Category categoryObject = new Gson().fromJson(dbObj.toString(), Category.class);
-		return categoryObject;
+		Gson gson = new Gson();
+		T t = gson.fromJson(dbObj.toString(), klass);
+		if (idObj != null) {
+			String id = idObj.toString();
+			try {
+				Method[] methods = t.getClass().getMethods();
+				for (Method m : methods) {
+					if (m.getName().contains("setId")) {
+						m.invoke(t, id);
+					}
+				}
+			} catch (Exception e) {
+			}
+		}
+		return t;
 	}
 	
 	//get subcategory from document
@@ -157,19 +175,31 @@ public class DAOService {
 		
 		Map<String, Object> sortingKey = new HashMap<>();
 		if (sF != null) {
-			int sort = -1;
-			if (sT.equalsIgnoreCase("ASC")) {
-				sort = 1;
+			int sort = 1;
+			if (sT.equalsIgnoreCase("DESC")) {
+				sort = -1;
 			}
 			sortingKey.put(sF, sort);
 		}
 
 		List<Document> objects = mongoDBManager.getObjects(CATEGORY_COLLECTION, pos, n, queryParams, sortingKey);
 		if (objects != null) {
-			List<Category> list = objects.stream().map(o -> getCategoryFromDocument(o)).collect(Collectors.toList());
+			List<Category> list = objects.stream().map(o -> getDocToClass(o, Category.class)).collect(Collectors.toList());
 			return list;
 		}
 		return Collections.emptyList();
+	}
+	
+	//get category details
+	public Category getCategoryDetails(String categoryId) {
+		Map<String, Object> queryParams = new HashMap<>();
+		queryParams.put("_id", new ObjectId(categoryId));
+		Document document = mongoDBManager.getObject(CATEGORY_COLLECTION, queryParams);
+		if (document == null)
+			return null;
+		
+		Category category = getDocToClass(document, Category.class);
+		return category;
 	}
 	
 	//create new category
@@ -179,75 +209,46 @@ public class DAOService {
 		return addObject;
 	}
 	
-	//get category details
-	public Category getCategoryDetails(String categoryId) {
-		Map<String, Object> queryParams = new HashMap<>();
-		queryParams.put("categoryId", categoryId);
-		Document document = mongoDBManager.getObject(CATEGORY_COLLECTION, queryParams);
-		if (document == null)
-			return null;
-		Category category = getCategoryFromDocument(document);
-		return category;
-	}
-	
 	//update category
 	public Category updateCategory(Category category) {
-		String json = new Gson().toJson(category);
+		JsonObject jsonObj = new Gson().toJsonTree(category).getAsJsonObject();
+		jsonObj.remove("id");
+		
 		Map<String, Object> queryParam = new HashMap<>();
-		queryParam.put("categoryId", category.getCategoryId());
-		Document doc = mongoDBManager.updateObject(CATEGORY_COLLECTION, queryParam, json);
+		queryParam.put("_id", new ObjectId(category.getId()));
+		
+		Document doc = mongoDBManager.updateObject(CATEGORY_COLLECTION, queryParam, jsonObj.toString());
 		if(doc == null)
 			return null;
-		return getCategoryFromDocument(doc);
+		
+		return category;
 	}
-	
-	//archive category
-	public Boolean archiveCategory(String categoryId) {
-		Map<String, Object> queryParams = new HashMap<>();
-		queryParams.put("categoryId", categoryId);
-		Map<String, Object> fieldValue = new HashMap<>();
-		fieldValue.put("deleted", true);
-		Boolean status = mongoDBManager.setField(CATEGORY_COLLECTION, queryParams, fieldValue);
-		return status;
-	}
-	
-	
-	//archive category
-	public Boolean unarchiveCategory(String categoryId) {
-		Map<String, Object> queryParams = new HashMap<>();
-		queryParams.put("categoryId", categoryId);
-		Map<String, Object> fieldValue = new HashMap<>();
-		fieldValue.put("deleted", false);
-		Boolean status = mongoDBManager.setField(CATEGORY_COLLECTION, queryParams, fieldValue);
-		return status;
-	}
-	
 	
 	//delete category
 	public void deleteCategory(String categoryId) {
 		Map<String, Object> queryParams = new HashMap<>();
-		queryParams.put("categoryId", categoryId);
+		queryParams.put("_id", new ObjectId(categoryId));
 		mongoDBManager.deleteObjects(CATEGORY_COLLECTION, queryParams);
 	}
 	
 	
-	//get category list
+	//get subcategory list
 	public List<SubCategory> getSubcategoryList(int n, int pos, String sF, String sT) {
 		Map<String, Object> queryParams = new HashMap<>();
 		queryParams.put("deleted", false);
 		
 		Map<String, Object> sortingKey = new HashMap<>();
 		if (sF != null) {
-			int sort = -1;
-			if (sT.equalsIgnoreCase("ASC")) {
-				sort = 1;
+			int sort = 1;
+			if (sT.equalsIgnoreCase("DESC")) {
+				sort = -1;
 			}
 			sortingKey.put(sF, sort);
 		}
 
 		List<Document> objects = mongoDBManager.getObjects(SUBCATEGORY_COLLECTION, pos, n, queryParams, sortingKey);
 		if (objects != null) {
-			List<SubCategory> list = objects.stream().map(o -> getSubcategoryFromDocument(o)).collect(Collectors.toList());
+			List<SubCategory> list = objects.stream().map(o -> getDocToClass(o, SubCategory.class)).collect(Collectors.toList());
 			return list;
 		}
 		return Collections.emptyList();
@@ -261,70 +262,38 @@ public class DAOService {
 	}
 	
 	//get subcategory details
-	public SubCategory getSubcategoryDetails(SubCategory subcategory) {
+	public SubCategory getSubcategoryDetails(String subcategoryId) {
 		
 		Map<String, Object> queryParams = new HashMap<>();
-		queryParams.put("categoryId", subcategory.getCategoryId());
-		queryParams.put("subcategoryId", subcategory.getSubcategoryId());
-		
+		queryParams.put("_id", new ObjectId(subcategoryId));
 		Document document = mongoDBManager.getObject(SUBCATEGORY_COLLECTION, queryParams);
 		
 		if (document == null)
 			return null;
 		
-		SubCategory subcategoryDoc = getSubcategoryFromDocument(document);
-		return subcategoryDoc;
+		SubCategory subcategory = getDocToClass(document, SubCategory.class);
+		return subcategory;
 	}
 	
 	//update subcategory
 	public SubCategory updateSubcategory(SubCategory subcategory) {
-		String json = new Gson().toJson(subcategory);
+		JsonObject jsonObj = new Gson().toJsonTree(subcategory).getAsJsonObject();
+		jsonObj.remove("id");
 		
 		Map<String, Object> queryParam = new HashMap<>();
-		queryParam.put("subcategoryId", subcategory.getSubcategoryId());
+		queryParam.put("_id", new ObjectId(subcategory.getId()));
 		
-		Document doc = mongoDBManager.updateObject(SUBCATEGORY_COLLECTION, queryParam, json);
-		
+		Document doc = mongoDBManager.updateObject(SUBCATEGORY_COLLECTION, queryParam, jsonObj.toString());
 		if(doc == null)
 			return null;
 		
-		return getSubcategoryFromDocument(doc);
-	}
-	
-	//archive subcategory
-	public Boolean archiveSubcategory(SubCategory subcategory) {
-		
-		Map<String, Object> queryParams = new HashMap<>();
-		queryParams.put("categoryId", subcategory.getCategoryId());
-		queryParams.put("subcategoryId", subcategory.getSubcategoryId());
-		
-		Map<String, Object> fieldValue = new HashMap<>();
-		fieldValue.put("deleted", true);
-		
-		Boolean status = mongoDBManager.setField(SUBCATEGORY_COLLECTION, queryParams, fieldValue);
-		return status;
-	}
-	
-	//unarchive subcategory
-	public Boolean unarchiveSubcategory(SubCategory subcategory) {
-		
-		Map<String, Object> queryParams = new HashMap<>();
-		queryParams.put("categoryId", subcategory.getCategoryId());
-		queryParams.put("subcategoryId", subcategory.getSubcategoryId());
-		
-		Map<String, Object> fieldValue = new HashMap<>();
-		fieldValue.put("deleted", false);
-		
-		Boolean status = mongoDBManager.setField(SUBCATEGORY_COLLECTION, queryParams, fieldValue);
-		return status;
+		return subcategory;
 	}
 	
 	//delete subcategory
-	public void deleteSubcategory(SubCategory subcategory) {
-		
+	public void deleteSubcategory(String subcategoryId) {
 		Map<String, Object> queryParams = new HashMap<>();
-		queryParams.put("categoryId", subcategory.getCategoryId());
-		queryParams.put("subcategoryId", subcategory.getSubcategoryId());
+		queryParams.put("_id", new ObjectId(subcategoryId));
 		mongoDBManager.deleteObjects(SUBCATEGORY_COLLECTION, queryParams);
 	}
 	
@@ -335,16 +304,16 @@ public class DAOService {
 		
 		Map<String, Object> sortingKey = new HashMap<>();
 		if (sF != null) {
-			int sort = -1;
-			if (sT.equalsIgnoreCase("ASC")) {
-				sort = 1;
+			int sort = 1;
+			if (sT.equalsIgnoreCase("DESC")) {
+				sort = -1;
 			}
 			sortingKey.put(sF, sort);
 		}
 
 		List<Document> objects = mongoDBManager.getObjects(PRODUCT_COLLECTION, pos, n, queryParams, sortingKey);
 		if (objects != null) {
-			List<Products> list = objects.stream().map(o -> getProductFromDocument(o)).collect(Collectors.toList());
+			List<Products> list = objects.stream().map(o -> getDocToClass(o, Products.class)).collect(Collectors.toList());
 			return list;
 		}
 		return Collections.emptyList();
@@ -358,35 +327,37 @@ public class DAOService {
 	}
 	
 	//get product details
-	public Products getProductDetails(Products product) {
+	public Products getProductDetails(String productId) {
 		Map<String, Object> queryParams = new HashMap<>();
-		queryParams.put("productId", product.getProductId());
+		queryParams.put("_id", new ObjectId(productId));
+		
 		Document document = mongoDBManager.getObject(PRODUCT_COLLECTION, queryParams);
 		if (document == null)
 			return null;
 		
-		Products productDoc = getProductFromDocument(document);
-		return productDoc;
+		Products product = getDocToClass(document, Products.class);
+		return product;
 	}
 	
 	//update category
 	public Products updateProduct(Products product) {
-		String json = new Gson().toJson(product);
 		
+		JsonObject jsonObj = new Gson().toJsonTree(product).getAsJsonObject();
+		jsonObj.remove("id");
 		Map<String, Object> queryParam = new HashMap<>();
-		queryParam.put("productId", product.getProductId());
-		Document doc = mongoDBManager.updateObject(PRODUCT_COLLECTION, queryParam, json);
+		queryParam.put("_id", new ObjectId(product.getId()));
+		Document doc = mongoDBManager.updateObject(PRODUCT_COLLECTION, queryParam, jsonObj.toString());
 		if(doc == null)
 			return null;
 		
-		return getProductFromDocument(doc);
+		return product;
 	}
 	
 	//temporary delete category
-	public Boolean tempDeleteProduct(Products product) {
+	public Boolean tempDeleteProduct(String productId) {
 		
 		Map<String, Object> queryParams = new HashMap<>();
-		queryParams.put("productId", product.getProductId());
+		queryParams.put("_id", new ObjectId(productId));
 		
 		Map<String, Object> fieldValue = new HashMap<>();
 		fieldValue.put("deleted", true);
@@ -396,41 +367,72 @@ public class DAOService {
 	}
 	
 	//delete category
-	public void deleteSubcategory(Products product) {
-		
+	public void deleteProduct(String productId) {
 		Map<String, Object> queryParams = new HashMap<>();
-		queryParams.put("productId", product.getProductId());
+		queryParams.put("_id", new ObjectId(productId));
 		mongoDBManager.deleteObjects(PRODUCT_COLLECTION, queryParams);
 	}
 	
-	
-	//get shop list
-	public List<Products> getShopList(int n, int pos, String categoryId, String subcategoryId) {
+	//Get Category By Name
+	public Category getCategoryByName(String categoryName) {
 		Map<String, Object> queryParams = new HashMap<>();
+		queryParams.put("categoryName", categoryName);
+		Document document = mongoDBManager.getObject(CATEGORY_COLLECTION, queryParams);
+		if (document == null)
+			return null;
+		
+		Category category = getDocToClass(document, Category.class);
+		return category;
+	}
+	
+	//Get Subcategory By Name
+	public SubCategory getSubcategoryByName(String categoryId, String subcategoryName) {
+		Map<String, Object> queryParams = new HashMap<>();
+		queryParams.put("categoryId", categoryId);
+		queryParams.put("subcategoryName", subcategoryName);
+		Document document = mongoDBManager.getObject(SUBCATEGORY_COLLECTION, queryParams);
+		if (document == null)
+			return null;
+		
+		SubCategory subcategory = getDocToClass(document, SubCategory.class);
+		return subcategory;
+	}
+	
+	//get shop list	
+	public List<Products> getShopList(int n, int pos, String categoryName, String subcategoryName, String productId, String sF, String sT) {
+		BasicDBObject queryParams = new BasicDBObject();
 		queryParams.put("deleted", false);
 		
-		if(categoryId != null && categoryId.equals("")) {
-			queryParams.put("categoryId", categoryId);
+		Category category = getCategoryByName(categoryName);
+		if(category != null) {
+			List<String> categoryList = new ArrayList<String>();
+			categoryList.add(category.getId());
+			queryParams.put("category", new BasicDBObject("$in", categoryList));
 			
-			if(subcategoryId != null && subcategoryId.equals("")) {
-				queryParams.put("subcategoryId", subcategoryId);
+			SubCategory subcategory = getSubcategoryByName(category.getId(), subcategoryName);
+			if(subcategory != null) {
+				List<String> subcategoryList = new ArrayList<String>();
+				subcategoryList.add(subcategory.getId());
+				queryParams.put("subcategory", new BasicDBObject("$in", subcategoryList));
 			}
 		}
 		
-		String sF = null;
-		String sT = null;
+		if(productId != null && !productId.equals(""))
+			queryParams.put("productId", productId);
+		
+		
 		Map<String, Object> sortingKey = new HashMap<>();
-		if (sF != null) {
-			int sort = -1;
-			if (sT.equalsIgnoreCase("ASC")) {
-				sort = 1;
+		if (sF != null && !sF.equals("")) {
+			int sort = 1;
+			if (sT.equalsIgnoreCase("DESC")) {
+				sort = -1;
 			}
 			sortingKey.put(sF, sort);
 		}
 		
-		List<Document> objects = mongoDBManager.getObjects(PRODUCT_COLLECTION, pos, n, queryParams, sortingKey);
+		List<Document> objects = mongoDBManager.getObjectsInArray(PRODUCT_COLLECTION, pos, n, queryParams, sortingKey);
 		if (objects != null) {
-			List<Products> list = objects.stream().map(o -> getProductFromDocument(o)).collect(Collectors.toList());
+			List<Products> list = objects.stream().map(o -> getDocToClass(o, Products.class)).collect(Collectors.toList());
 			return list;
 		}
 		return Collections.emptyList();
@@ -438,21 +440,28 @@ public class DAOService {
 	
 	
 	//get hotdeals list
-	public List<Products> getHotdealList(int n, int pos, String categoryId, String subcategoryId) {
-		Map<String, Object> queryParams = new HashMap<>();
+	public List<Products> getHotdealList(int n, int pos, String categoryName, String subcategoryName, String productId, String sF, String sT) {
+		BasicDBObject queryParams = new BasicDBObject();
 		queryParams.put("deleted", false);
 		queryParams.put("dealCategory", "hotDeals");
 		
-		if(categoryId != null && categoryId.equals("")) {
-			queryParams.put("categoryId", categoryId);
+		Category category = getCategoryByName(categoryName);
+		if(category != null) {
+			List<String> categoryList = new ArrayList<String>();
+			categoryList.add(category.getId());
+			queryParams.put("category", new BasicDBObject("$in", categoryList));
 			
-			if(subcategoryId != null && subcategoryId.equals("")) {
-				queryParams.put("subcategoryId", subcategoryId);
+			SubCategory subcategory = getSubcategoryByName(category.getId(), subcategoryName);
+			if(subcategory != null) {
+				List<String> subcategoryList = new ArrayList<String>();
+				subcategoryList.add(subcategory.getId());
+				queryParams.put("subcategory", new BasicDBObject("$in", subcategoryList));
 			}
 		}
 		
-		String sF = null;
-		String sT = null;
+		if(productId != null && !productId.equals(""))
+			queryParams.put("productId", productId);
+		
 		Map<String, Object> sortingKey = new HashMap<>();
 		if (sF != null) {
 			int sort = -1;
@@ -462,7 +471,7 @@ public class DAOService {
 			sortingKey.put(sF, sort);
 		}
 		
-		List<Document> objects = mongoDBManager.getObjects(PRODUCT_COLLECTION, pos, n, queryParams, sortingKey);
+		List<Document> objects = mongoDBManager.getObjectsInArray(PRODUCT_COLLECTION, pos, n, queryParams, sortingKey);
 		if (objects != null) {
 			List<Products> list = objects.stream().map(o -> getProductFromDocument(o)).collect(Collectors.toList());
 			return list;
@@ -470,23 +479,26 @@ public class DAOService {
 		return Collections.emptyList();
 	}
 	
-	
 	//get top rated list
-	public List<Products> getTopRatedList(int n, int pos, String categoryId, String subcategoryId) {
-		Map<String, Object> queryParams = new HashMap<>();
+	public List<Products> getTopRatedList(int n, int pos, String categoryName, String subcategoryName, String productId, String sF, String sT) {
+		BasicDBObject queryParams = new BasicDBObject();
 		queryParams.put("deleted", false);
 		queryParams.put("dealCategory", "topRated");
 		
-		if(categoryId != null && categoryId.equals("")) {
-			queryParams.put("categoryId", categoryId);
+		Category category = getCategoryByName(categoryName);
+		if(category != null) {
+			List<String> categoryList = new ArrayList<String>();
+			categoryList.add(category.getId());
+			queryParams.put("category", new BasicDBObject("$in", categoryList));
 			
-			if(subcategoryId != null && subcategoryId.equals("")) {
-				queryParams.put("subcategoryId", subcategoryId);
+			SubCategory subcategory = getSubcategoryByName(category.getId(), subcategoryName);
+			if(subcategory != null) {
+				List<String> subcategoryList = new ArrayList<String>();
+				subcategoryList.add(subcategory.getId());
+				queryParams.put("subcategory", new BasicDBObject("$in", subcategoryList));
 			}
 		}
 		
-		String sF = null;
-		String sT = null;
 		Map<String, Object> sortingKey = new HashMap<>();
 		if (sF != null) {
 			int sort = -1;
@@ -496,7 +508,7 @@ public class DAOService {
 			sortingKey.put(sF, sort);
 		}
 		
-		List<Document> objects = mongoDBManager.getObjects(PRODUCT_COLLECTION, pos, n, queryParams, sortingKey);
+		List<Document> objects = mongoDBManager.getObjectsInArray(PRODUCT_COLLECTION, pos, n, queryParams, sortingKey);
 		if (objects != null) {
 			List<Products> list = objects.stream().map(o -> getProductFromDocument(o)).collect(Collectors.toList());
 			return list;
@@ -565,3 +577,82 @@ public class DAOService {
 	}
 	
 }
+
+/*Map<String, Object> queryParams = new HashMap<>();
+queryParams.put("deleted", false);
+
+Category category = getCategoryByName(categoryName);
+if(category == null)
+	return Collections.emptyList();
+queryParams.put("category", category.getId());
+
+if(subcategoryName != null && !subcategoryName.equals("")) {
+	SubCategory subcategory = getSubcategoryByName(category.getId(), subcategoryName);
+	if(subcategory != null && !subcategory.equals("")) {
+		queryParams.put("subcategory", subcategory.getId());
+	}
+}
+
+String sF = null;
+String sT = null;
+Map<String, Object> sortingKey = new HashMap<>();
+if (sF != null) {
+	int sort = -1;
+	if (sT.equalsIgnoreCase("ASC")) {
+		sort = 1;
+	}
+	sortingKey.put(sF, sort);
+}
+
+List<Document> objects = mongoDBManager.getObjects(PRODUCT_COLLECTION, pos, n, queryParams, sortingKey);
+if (objects != null) {
+	List<Products> list = objects.stream().map(o -> getDocToClass(o, Products.class)).collect(Collectors.toList());
+	return list;
+}
+return Collections.emptyList();
+
+public List<Products> getShopList(int n, int pos, String categoryName, String subcategoryName) {
+		Map<String, Object> queryParams = new HashMap<>();
+		queryParams.put("deleted", false);
+		Category category = getCategoryByName(categoryName);
+		if(category == null)
+			return Collections.emptyList();
+		
+		List<String> categoryList = new ArrayList<String>();
+		categoryList.add(category.getId());
+		JsonArray categoryArr = new JsonArray();
+		
+		SubCategory subcategory = getSubcategoryByName(category.getId(), subcategoryName);
+		List<String> subcategoryList = new ArrayList<String>();
+		subcategoryList.add(subcategory.getId());
+		JsonArray subcategoryArr = new JsonArray();
+		
+		if(subcategory == null)
+			return Collections.emptyList();
+		
+		categoryList.stream().map(c -> c).forEach(j -> categoryArr.add(j));
+		subcategoryList.stream().map(c -> c).forEach(j -> subcategoryArr.add(j));
+		queryParams.put("category", categoryArr);
+		queryParams.put("subcategory", subcategoryArr);
+		
+		
+		String sF = null;
+		String sT = null;
+		Map<String, Object> sortingKey = new HashMap<>();
+		if (sF != null) {
+			int sort = -1;
+			if (sT.equalsIgnoreCase("ASC")) {
+				sort = 1;
+			}
+			sortingKey.put(sF, sort);
+		}
+		
+		List<Document> objects = mongoDBManager.getObjects(PRODUCT_COLLECTION, pos, n, queryParams, sortingKey);
+		if (objects != null) {
+			List<Products> list = objects.stream().map(o -> getDocToClass(o, Products.class)).collect(Collectors.toList());
+			return list;
+		}
+		System.out.println(objects);
+		return Collections.emptyList();
+	}
+*/

@@ -94,7 +94,7 @@ public class MongoDBManager {
 		return getObjects(collectionName, 0, -1, queryParams, null);
 	}
 
-	// give negative value of n to get all results
+	//Give negative value of n to get all results
 	public List<Document> getObjects(String collectionName, int startPos, int n, Map<String, Object> queryParams, Map<String, Object> sortingKey) {
 		return getObjects(collectionName, startPos, n, queryParams, null, sortingKey);
 	}
@@ -126,13 +126,70 @@ public class MongoDBManager {
 			find = find.limit(n);
 		}
 		find.forEach(new Block<Document>() {
-
+			
 			@Override
 			public void apply(Document paramT) {
 				objList.add(paramT);
 			}
 		});
 		return objList;
+	}
+	
+	
+	//Get Object List in Array
+	public List<Document> getObjectsInArray(String collectionName, Map<String, Object> queryParams) {
+		return getObjects(collectionName, 0, -1, queryParams, null);
+	}
+
+	//Give negative value of n to get all results
+	public List<Document> getObjectsInArray(String collectionName, int startPos, int n, Map<String, Object> queryParams, Map<String, Object> sortingKey) {
+		List<Document> objList = new ArrayList<Document>();
+		if (startPos < 0) {
+			return objList;
+		}
+		MongoCollection<Document> collection = getDB().getCollection(collectionName);
+		if (collection == null) {
+			return objList;
+		}
+		if (queryParams == null) {
+			queryParams = new HashMap<>();
+		}
+		FindIterable<Document> find = collection.find(new Document(queryParams));
+		if (sortingKey != null && sortingKey.size() > 0) {
+			find = find.sort(new Document(sortingKey));
+		}
+		if (startPos > 0) {
+			find = find.skip(startPos);
+		}
+		if (n >= 0) {
+			find = find.limit(n);
+		}
+		find.forEach(new Block<Document>() {	
+			@Override
+			public void apply(Document paramT) {
+				objList.add(paramT);
+			}
+		});
+		
+		return objList;
+		//FindIterable<Document> find = collection.find(new Document(queryParams));
+		/*if (sortingKey != null && sortingKey.size() > 0) {
+			find = find.sort(new Document(sortingKey));
+		}
+		if (startPos > 0) {
+			find = find.skip(startPos);
+		}
+		if (n >= 0) {
+			find = find.limit(n);
+		}
+		find.forEach(new Block<Document>() {
+			
+			@Override
+			public void apply(Document paramT) {
+				objList.add(paramT);
+			}
+		});
+		return objList;*/
 	}
 
 	public static ObjectId getObjectId(String oid) {

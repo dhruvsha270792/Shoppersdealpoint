@@ -1,12 +1,12 @@
 <!-- main container -->
-<div class="main-container col1-layout" ng-controller="mainController">
+<div class="main-container col1-layout">
 	<div class="container">
 		<div class="row">
 
 			<!-- Home Tabs  -->
-			<div class="col-sm-8 col-md-9 col-xs-12" data-ng-init="getTopRatedList();">
-				<div class="home-tab">
-					<ul class="nav home-nav-tabs home-product-tabs">
+			<div class="col-sm-8 col-md-9 col-xs-12">
+				<div class="home-tab" data-ng-init="getTopRatedList();">
+					<ul class="nav home-nav-tabs home-product-tabs" ng-click="goToTopRated();">
 						<li class="active"><a href="#topRated" aria-expanded="false">Top Rated</a></li>
 					</ul>
 					<div id="productTabContent" class="tab-content">
@@ -15,16 +15,16 @@
 								<div class="slider-items-products">
 									<div id="featured-slider" class="product-flexslider hidden-buttons">
 										<div class="slider-items slider-width-col4">
-											<div class="product-item" data-ng-repeat="topRated in topRatedList">
+											<div class="product-item" ng-repeat="topRated in topRatedList">
 												<div class="item-inner">
 													<div class="product-thumbnail">
-														<div class="icon-sale-label sale-left">Sale</div>
-														<div class="icon-new-label new-right">New</div>
+														<!-- <div class="icon-sale-label sale-left">Sale</div>
+														<div class="icon-new-label new-right">New</div> -->
 														<div class="pr-img-area">
 															<a title="" href="">
 																<figure>
-																	<img class="first-img" src="{{topRated.images[2]}}" alt="">
-																	<img class="hover-img" src="{{topRated.images[3]}}" alt="">
+																	<img class="first-img" src="{{topRated.images[0]}}" alt="">
+																	<img class="hover-img" src="{{topRated.images[1]}}" alt="">
 																</figure>
 															</a>
 															<button type="button" class="add-to-cart-mt">
@@ -81,8 +81,8 @@
 				</div>
 			</div>
 			<!--Hot deal -->
-			<div class="col-md-3 col-sm-4 col-xs-12 hot-products" data-ng-init="getHotdeals();">
-				<div class="hot-deal">
+			<div class="col-md-3 col-sm-4 col-xs-12 hot-products">
+				<div class="hot-deal" data-ng-init="getHotdeals();">
 					<span class="title-text">Hot deal</span>
 					<ul class="products-grid">
 						<li class="item">

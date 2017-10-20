@@ -1,15 +1,12 @@
 angular.module('shoppersApp').controller('mainController',['$scope','mainService', function($scope, mainService) {
 	
-	$scope.showCategory = function() {
-		mainService.getCategoryList().success(function(response){
-			$scope.categoryList = response.data;
-			mainService.getSubcategoryList().success(function(response){
-				$scope.allSubcategories = response.data;
-			})
-		})
+	$scope.menuList = function() {
+		mainService.getMenuList().success(function(response) {
+			$scope.menuList = response;
+		});
 	}
 	
-	$scope.getSubcategoryList = function(categoryId) {
+	/*$scope.getSubcategoryList = function(categoryId) {
 		$scope.subcategoryList = [];
 		$scope.subcategoryListLeft = [];
 		$scope.subcategoryListRight = []
@@ -31,7 +28,7 @@ angular.module('shoppersApp').controller('mainController',['$scope','mainService
 		else {
 			$scope.subcategoryListLeft = $scope.subcategoryList;
 		}
-	}
+	}*/
 	
 	$scope.getHotdeals = function() {
 		mainService.getHotDealList().success(function(response){
@@ -44,4 +41,8 @@ angular.module('shoppersApp').controller('mainController',['$scope','mainService
 			$scope.topRatedList = response;
 		});
 	}
+	
+	/*$scope.goToTopRated = function() {
+		$state.go('topRated');
+	}*/
 }]);

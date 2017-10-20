@@ -32,7 +32,8 @@ angular.module('shoppersApp')
 	
 	.state("home",{
 		url: "/",
-		templateUrl: "view/mainPage.html"
+		templateUrl: "view/mainPage.html",
+		controller: "mainController"
 	})
 			
 	/*.state("shop",{

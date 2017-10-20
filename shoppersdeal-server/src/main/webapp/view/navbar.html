@@ -1,5 +1,5 @@
-<nav data-ng-controller="mainController">
-	<div class="container" data-ng-init="showCategory();">
+<nav>
+	<div class="container">
 		<div class="row">
 			<div class="col-md-3 col-sm-4">
 				<div class="mm-toggle-wrap">
@@ -14,22 +14,21 @@
 							<h3>Shop by category</h3>
 						</div>
 						<div class="mega-menu-category">
-							<ul class="nav" ng-repeat="category in categoryList">
-								<li>
-									<a ng-mouseover="getSubcategoryList(category.categoryId)">{{category.categoryName}}</a>
-									<div class="wrap-popup">
+							<ul class="nav" ng-repeat="category in menuList">
+								<li><a>{{category.categoryName}}</a>
+									<div class="wrap-popup" ng-if="category.subcategory.length >= 1">
 										<div class="popup">
 											<div class="row">
-												<div class="col-md-4 col-sm-6">
-													<ul class="nav">
-														<li data-ng-repeat="subcategoryLeft in subcategoryListLeft">
+												<!-- <div class="col-md-4 col-sm-6"> -->
+													<ul class="nav" >
+														<li data-ng-repeat="subcategory in category.subcategory">
 															<a href="">
-																<span>{{subcategoryLeft.subcategoryName}}</span>
+																<span>{{subcategory.subcategoryName}}</span>
 															</a>
 														</li>
 													</ul>
-												</div>
-												<div class="col-md-4 col-sm-6 has-sep">
+												<!-- </div> -->
+												<!-- <div class="col-md-4 col-sm-6 has-sep">
 													<ul class="nav">
 														<li data-ng-repeat="subcategoryRight in subcategoryListRight">
 															<a href="">
@@ -37,7 +36,7 @@
 															</a>
 														</li>
 													</ul>
-												</div>
+												</div> -->
 											</div>
 										</div>
 									</div>

@@ -2,18 +2,18 @@ package com.nexusdevs.shoppersdeal.server.dto;
 
 public class Category {
 
-	private String categoryId;
+	private String id;
 	private String categoryName;
 	private long createTime;
 	private long updateTime;
 	private boolean deleted;
 
-	public String getCategoryId() {
-		return categoryId;
+	public String getId() {
+		return id;
 	}
 
-	public void setCategoryId(String categoryId) {
-		this.categoryId = categoryId;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getCategoryName() {

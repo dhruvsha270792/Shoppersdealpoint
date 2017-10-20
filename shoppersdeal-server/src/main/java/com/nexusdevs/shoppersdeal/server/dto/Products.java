@@ -6,9 +6,10 @@ import com.nexusdevs.shoppersdeal.server.common.DealCategory;
 
 public class Products {
 
-	private String productId;
+	private String id;
 	private List<String> category;
 	private List<String> subcategory;
+	private String productId;
 	private String productName;
 	private String compName;
 	private Float price;
@@ -21,12 +22,12 @@ public class Products {
 	private long updateTime;
 	private boolean deleted;
 
-	public String getProductId() {
-		return productId;
+	public String getId() {
+		return id;
 	}
 
-	public void setProductId(String productId) {
-		this.productId = productId;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public List<String> getCategory() {
@@ -43,6 +44,14 @@ public class Products {
 
 	public void setSubcategory(List<String> subcategory) {
 		this.subcategory = subcategory;
+	}
+
+	public String getProductId() {
+		return productId;
+	}
+
+	public void setProductId(String productId) {
+		this.productId = productId;
 	}
 
 	public String getProductName() {
