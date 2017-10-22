@@ -26,13 +26,14 @@ private static Logger logger= LoggerFactory.getLogger(ProductService.class);
 	
 	public String getMenuList() {
 		try {
+			
 			JsonParser jsParser = new JsonParser();
 			
-			List<Category> categoryList = daoService.getCategoryList(0, 0, null, null);
+			List<Category> categoryList = daoService.getCategoryList(0, 0, "createTime", "DESC");
 			JsonArray categoryArray = new JsonArray();
 			categoryList.stream().map(o -> (JsonObject) jsParser.parse(new Gson().toJson(o, Category.class))).forEach(j -> categoryArray.add(j));
 			
-			List<SubCategory> subcategoryList = daoService.getSubcategoryList(0, 0, null, null);
+			List<SubCategory> subcategoryList = daoService.getSubcategoryList(0, 0, "createTime", "DESC");
 			JsonArray subcategoryArray = new JsonArray();
 			subcategoryList.stream().map(o -> (JsonObject) jsParser.parse(new Gson().toJson(o, SubCategory.class))).forEach(j -> subcategoryArray.add(j));
 			
@@ -73,9 +74,9 @@ private static Logger logger= LoggerFactory.getLogger(ProductService.class);
 		return null;
 	}
 	
-	public JsonArray getTopRatedList(int n, int pos, String categoryName, String subcategoryName, String productId, String sortField, String sortType) {
+	public JsonArray getSpecialProductList(int n, int pos, String categoryName, String subcategoryName, String productId, String sortField, String sortType) {
 		try {
-			List<Products> topRatedList = daoService.getTopRatedList(n, pos, categoryName, subcategoryName, productId, sortField, sortType);
+			List<Products> topRatedList = daoService.getSpecialProductList(n, pos, categoryName, subcategoryName, productId, sortField, sortType);
 			JsonArray topRatedArray = new JsonArray();
 			JsonParser jsParser = new JsonParser();
 			topRatedList.stream().map(o -> (JsonObject) jsParser.parse(new Gson().toJson(o, Products.class))).forEach(j -> topRatedArray.add(j));

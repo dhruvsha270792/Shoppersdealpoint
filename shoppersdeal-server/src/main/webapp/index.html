@@ -8,7 +8,7 @@
  <![endif]-->
 
 <meta http-equiv="x-ua-compatible" content="ie=edge">
-<title>SDP</title>
+<title>Shoppers Deal</title>
 
 <meta name="description" content="best template, template free, responsive theme, fashion store, responsive theme, responsive html theme, Premium website templates, web templates, Multi-Purpose Responsive HTML5 Template">
 <meta name="keywords" content="bootstrap, ecommerce, fashion, layout, responsive, responsive template, responsive template download, responsive theme, retail, shop, shopping, store, Premium website templates, web templates, Multi-Purpose Responsive HTML5 Template" />
@@ -31,6 +31,7 @@
 <link rel="stylesheet" type="text/css" href="./assets/css/flexslider.css"><!-- flexslider CSS -->
 <link rel="stylesheet" type="text/css" href="./assets/css/jquery-ui.css"><!-- jquery-ui.min CSS  -->
 <link href="./assets/css/revolution-slider.css" rel="stylesheet"><!-- Revolution Slider CSS -->
+<link rel="stylesheet" type="text/css" href="./assets/css/quick_view_popup.css" media="all"><!-- Quick View CSS -->
 <link rel="stylesheet" type="text/css" href="./assets/css/style.css" media="all"><!-- style CSS -->
 
 <!-- JS -->
@@ -58,9 +59,16 @@ var mega_menu = '0';
 
 <script src="./app/app.js"></script>
 <script src="./app/route.config.js"></script>
+<script src="./app/directives/ui-directives.js"></script>
 
-<script src="./app/controller/mainController.js"></script>
+<script src="./app/services/sessionService.js"></script>
 <script src="./app/services/mainService.js"></script>
+<script src="./app/services/modalService.js"></script>
+<script src="./app/controller/mainController.js"></script>
+<script src="./app/controller/shopController.js"></script>
+<script src="./app/controller/dealController.js"></script>
+<script src="./app/controller/modalController.js"></script>
+
 </head>
 
 <body class="cms-index-index cms-home-page" ng-app="shoppersApp" id="shoppersApp" ng-controller="mainController">
@@ -82,235 +90,7 @@ var mega_menu = '0';
 		<!-- end nav -->
 
 		<!-- Home Slider Start -->
-		<div class="slider">
-			<div class="tp-banner-container clearfix">
-				<div class="tp-banner">
-					<ul>
-						<!-- SLIDE 1 -->
-						<li data-transition="slidehorizontal" data-slotamount="5" data-masterspeed="700">
-							<!-- MAIN IMAGE -->
-							<img src="https://cdn.shopify.com/s/files/1/0724/1963/files/ClemonteFashionBanner3.jpg?17413740471670934651" alt="slidebg1" data-bgfit="cover" data-bgposition="center center" data-bgrepeat="no-repeat">
-							<!-- LAYERS -->
-							<!-- LAYER NR. 1 -->
-							<div class="tp-caption very_big_white skewfromrightshort fadeout"
-								data-x="center"
-								data-y="100"
-								data-speed="500"
-								data-start="1200"
-								data-easing="Circ.easeInOut"
-								style="font-size: 70px; font-weight: 800; color: #ffa200;">Clemonte<span style="color: #000;"> Fashion</span>
-							</div>
-							<!-- LAYER NR. 1 -->
-							
-							<!-- LAYER NR. 2 -->
-							<div class="tp-caption tp-caption medium_text skewfromrightshort fadeout"
-								data-x="center"
-								data-y="165"
-								data-hoffset="0"
-								data-voffset="-73"
-								data-speed="500"
-								data-start="1200"
-								data-easing="Power4.easeOut"
-								style="font-size: 20px; font-weight: 500; color: #666;"> Sale upto 25% all products
-							</div>
-							<!-- LAYER NR. 2 -->
-								
-							<!-- LAYER NR. 3 -->
-							<div class="tp-caption customin tp-resizeme rs-parallaxlevel-0"
-								data-x="center"
-								data-y="210"
-								data-hoffset="0"
-								data-voffset="98"
-								data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-								data-speed="500"
-								data-start="1500"
-								data-easing="Power3.easeInOut"
-								data-splitin="none"
-								data-splitout="none"
-								data-elementdelay="0.1"
-								data-endelementdelay="0.1"
-								data-linktoslide="next"
-								style="border: 2px solid #69bd43; font-size: 14px; background-color: #4caf50; color: #fff; z-index: 12; max-width: auto; max-height: auto; white-space: nowrap; letter-spacing: 1px;">
-								<a href='#' class='largebtn slide1'>View more </a>
-							</div>
-							<!-- LAYER NR. 3 -->
-							<!-- LAYERS -->
-						</li>
-
-						<!-- SLIDE 2 -->
-						<li data-transition="slidehorizontal" data-slotamount="5" data-masterspeed="700">
-							<!-- MAIN IMAGE -->
-							<img src="https://www.rugbyplus.com/media/revslider/Banner1.jpg" alt="slidebg1" data-bgfit="cover" data-bgposition="center center" data-bgrepeat="no-repeat">
-							
-							<!-- LAYERS -->
-							<!-- LAYER NR. 1 -->
-							<div class="tp-caption white_heavy_60 customin ltl tp-resizeme"
-								data-x="410"
-								data-y="140"
-								data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-								data-speed="1200"
-								data-start="700"
-								data-easing="Power4.easeOut"
-								data-splitin="chars"
-								data-splitout="none"
-								data-elementdelay="0.1"
-								data-endelementdelay="0.1"
-								data-endspeed="1000"
-								data-endeasing="Power4.easeIn"
-								style="font-size: 70px; font-weight: 800; color: #333; text-transform: uppercase;">Live Authentically 
-							</div>
-								
-							<!-- LAYER NR. 2 -->
-							<div class="tp-caption black_thin_blackbg_30 customin ltl tp-resizeme"
-								data-x="410"
-								data-y="220"
-								data-customin="x:0;y:0;z:0;rotationX:90;rotationY:0;rotationZ:0;scaleX:1;scaleY:1;skewX:0;skewY:0;opacity:0;transformPerspective:200;transformOrigin:50% 0%;"
-								data-speed="1500"
-								data-start="1000"
-								data-easing="Power4.easeInOut"
-								data-splitin="none"
-								data-splitout="none"
-								data-elementdelay="0.01"
-								data-endelementdelay="0.1"
-								data-endspeed="1000"
-								data-endeasing="Power4.easeIn"
-								style="z-index: 3; max-width: auto; max-height: auto; white-space: nowrap; color: #666; font-size: 20px; font-weight: 500;">
-								.
-							</div>
-							
-							<!-- LAYER NR. 4 -->
-							<div class="tp-caption lfb ltb start tp-resizeme"
-								data-x="410"
-								data-y="270"
-								data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-								data-speed="1500"
-								data-start="1600"
-								data-easing="Power3.easeInOut"
-								data-splitin="none"
-								data-splitout="none"
-								data-elementdelay="0.01"
-								data-endelementdelay="0.1"
-								data-linktoslide="next"
-								style="z-index: 12; max-width: auto; max-height: auto; white-space: nowrap;">
-								<a href='#' class='largebtn solid'>Get It Now!</a>
-							</div>
-						</li>
-
-						<!-- SLIDE 3 -->
-						<li data-transition="slidehorizontal" data-slotamount="5" data-masterspeed="700">
-							<!-- MAIN IMAGE -->
-							<img src="http://rewireformassivesuccess.sharmakeshav.com/wp-content/uploads/2017/06/B2_V2.jpg" alt="slidebg3" data-bgfit="cover" data-bgposition="center center" data-bgrepeat="no-repeat">
-							
-							<!-- LAYERS -->
-							<!-- LAYER NR. 1 -->
-							<div class="tp-caption big_100_white lft start fadeout"
-								data-x="410"
-								data-y="120"
-								data-speed="500"
-								data-start="1200"
-								data-easing="Circ.easeInOut"
-								style="font-size: 70px; font-weight: 800; color: #fff;">
-							</div>
-							<div class="tp-caption big_100_white lft fadeout"
-								data-x="410"
-								data-y="180"
-								data-speed="500"
-								data-start="1200"
-								data-easing="Circ.easeInOut"
-								style="font-size: 50px; font-weight: 800; color: #4caf50;"></div>
-
-							<!-- LAYER NR. 2 -->
-							<div class="tp-caption tp-caption medium_text lfb fadeout"
-								data-x="410"
-								data-y="260"
-								data-speed="500"
-								data-start="1200"
-								data-easing="Power4.easeOut"
-								style="z-index: 3; max-width: auto; max-height: auto; white-space: nowrap; color: #666; font-size: 20px; font-weight: 500;">
-							</div>
-							
-							<!-- LAYER NR. 3 -->
-							<div class="tp-caption fade fadeout tp-resizeme"
-								data-x="410"
-								data-y="600"
-								data-hoffset="-100"
-								data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-								data-speed="1500"
-								data-start="800"
-								data-easing="Power3.easeInOut"
-								data-splitin="none"
-								data-splitout="none"
-								data-elementdelay="0.01"
-								data-endelementdelay="0.1"
-								data-linktoslide="next"
-								style="z-index: 12; max-width: auto; max-height: auto; white-space: nowrap;">
-								<a href='#' class='largebtn solid'>Shop Now!</a>
-							</div>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		
-		<!-- service section -->
-		<div class="jtv-service-area"  data-ng-if="$state.current.name === 'home'">
-			<div class="container">
-				<div class="row">
-					<div class="col col-md-3 col-sm-6 col-xs-12">
-						<div class="block-wrapper ship">
-							<div class="text-des">
-								<div class="icon-wrapper">
-									<i class="fa fa-truck"></i>
-								</div>
-								<div class="service-wrapper">
-									<h3>World-Wide Shipping</h3>
-									<p>On order over $99</p>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col col-md-3 col-sm-6 col-xs-12 ">
-						<div class="block-wrapper return">
-							<div class="text-des">
-								<div class="icon-wrapper">
-									<i class="fa fa-refresh"></i>
-								</div>
-								<div class="service-wrapper">
-									<h3>30 Days Return</h3>
-									<p>Moneyback guarantee</p>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col col-md-3 col-sm-6 col-xs-12">
-						<div class="block-wrapper support">
-							<div class="text-des">
-								<div class="icon-wrapper">
-									<i class="fa fa-umbrella"></i>
-								</div>
-								<div class="service-wrapper">
-									<h3>SUPPORT 24/7</h3>
-									<p>Call us: ( +123 ) 456 789</p>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col col-md-3 col-sm-6 col-xs-12">
-						<div class="block-wrapper user">
-							<div class="text-des">
-								<div class="icon-wrapper">
-									<i class="fa fa-user"></i>
-								</div>
-								<div class="service-wrapper">
-									<h3>MEMBER DISCOUNT</h3>
-									<p>25% on order over $199</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+		<data-ng-include src="'view/slider.html'"></data-ng-include>
 		
 		<ui-view></ui-view>
 
@@ -346,41 +126,14 @@ var mega_menu = '0';
 			</div>
 		</div>
 		<!--End of Newsletter Popup-->
+		
+		<!-- Start of Quick View -->
+		<data-ng-include src="'view/quickView.html'"></data-ng-include>
+		<!-- End of Quick View -->
 	</div>
 	
 	<script>
 	$(window).load(function() {
-		
-		/******************************************
-		*****************Mega Menu*****************
-		******************************************/
-		$(".mega-menu-title").click(function(){
-			if ($('.mega-menu-category').is(':visible')) {
-				$('.mega-menu-category').slideUp();
-			} else {
-				$('.mega-menu-category').slideDown();
-			}
-		});
-		
-		$('.mega-menu-category .nav > li').hover(function() {
-			$(this).addClass("active");
-			$(this).find('.popup').stop(true, true).fadeIn('slow');
-		}, function() {
-			$(this).removeClass("active");
-			$(this).find('.popup').stop(true, true).fadeOut('slow');
-		});
-		
-		$('.mega-menu-category .nav > li.view-more').on('click', function(e) {
-			if ($('.mega-menu-category .nav > li.more-menu').is(':visible')) {
-				$('.mega-menu-category .nav > li.more-menu').stop().slideUp();
-				$(this).find('a').text('More category');
-			} else {
-				$('.mega-menu-category .nav > li.more-menu').stop().slideDown();
-				$(this).find('a').text('Close menu');
-			}
-			e.preventDefault();
-		});
-		
 		/******************************************
 		****************Mobile menu****************
 		******************************************/
@@ -393,25 +146,11 @@ var mega_menu = '0';
 			Overlay: !0,
 			CollapseMenu: !0,
 			ClassName: "mobile-menu"
-		});
-		
-		<!-- Revolution Slider -->
-		$('.tp-banner').revolution({
-            delay:9000,
-            startwidth:1920,
-            startheight:790,
-            hideThumbs:10,
-            navigationType:"bullet",							
-            navigationStyle:"preview1",
-            hideArrowsOnMobile:"on",
-            touchenabled:"on",
-            onHoverStop:"on",
-            spinner:"spinner4"
-        });
+		});		
 		
 		<!-- Hot Deals Timer 1-->
-		var dthen1 = new Date("10/16/17 11:59:00 PM");
-		start = "10/14/17 03:02:11 AM";
+		var dthen1 = new Date("10/22/17 11:59:00 PM");
+		start = "10/21/17 08:00:00 AM";
 		start_date = Date.parse(start);
 		var dnow1 = new Date(start_date);
 		if(CountStepper>0)
@@ -426,7 +165,6 @@ var mega_menu = '0';
 	</script>
 	
 	<script>
-	
 	function autoScroll() {
 	    var div = document.getElementById("shoppersApp");
 	    div.style.display = '';
@@ -444,7 +182,6 @@ var mega_menu = '0';
 	    window.setTimeout(function(){ window.onscroll = null; }, 100);
 	    return false;
 	}
-	
 	</script>
 </body>
 </html>

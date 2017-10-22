@@ -16,7 +16,7 @@
 					<div class="headerlinkmenu col-lg-8 col-md-7 col-sm-8 col-xs-12">
 						<div class="links">
 							<div class="myaccount">
-								<a title="My Account" href="account_page.html">
+								<a title="My Account" ui-sref="account">
 									<i class="fa fa-user"></i>
 									<span class="hidden-xs">My Account</span>
 								</a>
@@ -75,37 +75,37 @@
 					<div class="top-cart-contain">
 						<div class="mini-cart">
 							<div data-toggle="dropdown" data-hover="dropdown" class="basket dropdown-toggle">
-								<a href="#">
+								<a href="">
 									<div class="cart-icon">
 										<i class="fa fa-shopping-cart"></i>
 									</div>
 									<div class="shoppingcart-inner hidden-xs">
 										<span class="cart-title">Cart</span>
-										<span class="cart-total">4 Item(s)</span>
+										<span class="cart-total">{{cartList.size}} Item(s)</span>
 									</div>
 								</a>
 							</div>
 							<div>
 								<div class="top-cart-content">
 									<div class="block-subtitle hidden-xs">Recently added item(s)</div>
-									<ul id="cart-sidebar" class="mini-products-list">
+									<ul id="cart-sidebar" class="mini-products-list" data-ng-repeat="cart in cartList.data">
 										<li class="item odd">
-											<a href="shopping_cart.html" title="Ipsums Dolors Untra" class="product-image">
-												<img src="./assets/images/products/img01.jpg" alt="Lorem ipsum dolor" width="65">
+											<a class="product-image">
+												<img src="./assets/images/products/img01.jpg" width="65">
 											</a>
 											<div class="product-details">
-												<a href="#" title="Remove This Item" class="remove-cart">
+												<a href="" title="Remove This Item" class="remove-cart" ng-click="removeFromCart(cart);">
 													<i class="icon-close"></i>
 												</a>
 												<p class="product-name">
-													<a href="shopping_cart.html">Lorem ipsum dolor sit amet Consectetur</a>
+													<a href="">{{cart.productName}}</a>
 												</p>
-												<strong>1</strong> x <span class="price">$20.00</span>
+												<strong>1</strong> x <span class="price">&#8377; {{cart.price}}</span>
 											</div>
 										</li>
 									</ul>
 									<div class="top-subtotal">
-										Subtotal: <span class="price">$520.00</span>
+										Subtotal: <span class="price">&#8377; {{cartList.subtotal}}</span>
 									</div>
 									<div class="actions">
 										<button class="btn-checkout" type="button">

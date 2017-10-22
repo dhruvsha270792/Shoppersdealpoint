@@ -5,29 +5,33 @@
 
 			<!-- Home Tabs  -->
 			<div class="col-sm-8 col-md-9 col-xs-12">
-				<div class="home-tab" data-ng-init="getTopRatedList();">
-					<ul class="nav home-nav-tabs home-product-tabs" ng-click="goToTopRated();">
-						<li class="active"><a href="#topRated" aria-expanded="false">Top Rated</a></li>
+				<div class="home-tab" data-ng-init="getShopDeals();">
+					<ul class="nav home-nav-tabs home-product-tabs">
+						<li class="active">
+							<a href="" data-ng-click="goToShop();">Top Shop Deals</a>
+						</li>
 					</ul>
 					<div id="productTabContent" class="tab-content">
 						<div class="tab-pane active in" id="featured">
 							<div class="featured-pro">
 								<div class="slider-items-products">
 									<div id="featured-slider" class="product-flexslider hidden-buttons">
-										<div class="slider-items slider-width-col4">
-											<div class="product-item" ng-repeat="topRated in topRatedList">
+										<wrap-owlcarousel class="slider-items slider-width-col4" data-options="{items: 3,itemsDesktop: [1024, 3],itemsDesktopSmall: [900, 2]};">
+											<div class="product-item" owl-carousel-item="" data-ng-repeat="topShopDeal in topShopDeals">
 												<div class="item-inner">
 													<div class="product-thumbnail">
-														<!-- <div class="icon-sale-label sale-left">Sale</div>
-														<div class="icon-new-label new-right">New</div> -->
+														<div class="icon-sale-label sale-left" data-ng-if="topShopDeal.dealCategory == 'hotDeals'">Hot</div>
+														<!-- <div class="icon-hot-label hot-right">Hot</div>
+														<!-- <div class="icon-new-label new-right">New</div> -->
 														<div class="pr-img-area">
 															<a title="" href="">
 																<figure>
-																	<img class="first-img" src="{{topRated.images[0]}}" alt="">
-																	<img class="hover-img" src="{{topRated.images[1]}}" alt="">
+																	<img class="first-img" data-ng-src="{{topShopDeal.images[0]}}">
+																	<img class="hover-img" data-ng-src="{{topShopDeal.images[1]}}">
+																	<img class="hover-img" data-ng-src="{{topShopDeal.images[2]}}">
 																</figure>
 															</a>
-															<button type="button" class="add-to-cart-mt">
+															<button type="button" class="add-to-cart-mt" data-ng-click="addToCart(topShopDeal)">
 																<i class="fa fa-shopping-cart"></i>
 																<span> Add to Cart</span>
 															</button>
@@ -38,10 +42,10 @@
 																	<a href="">
 																	<i class="fa fa-heart"></i></a>
 																</div>
-																<div class="mt-button add_to_compare">
+																<!-- <div class="mt-button add_to_compare">
 																	<a href=""><i class="fa fa-signal"></i></a>
-																</div>
-																<div class="mt-button quick-view">
+																</div> -->
+																<div class="mt-button quick-view" data-ng-click="openQuickView(topShopDeal);">
 																	<a href=""><i class="fa fa-search"></i></a>
 																</div>
 															</div>
@@ -50,7 +54,7 @@
 													<div class="item-info">
 														<div class="info-inner">
 															<div class="item-title">
-																<a title="" href="">{{topRated.productName}}</a>
+																<a title="" href="">{{topShopDeal.productName}}</a>
 															</div>
 															<div class="item-content">
 																<div class="rating">
@@ -63,7 +67,7 @@
 																<div class="item-price">
 																	<div class="price-box">
 																		<span class="regular-price">
-																			<span class="price">&#8377; {{topRated.price}}</span>
+																			<span class="price">&#8377; {{topShopDeal.discPrice}}</span>
 																		</span>
 																	</div>
 																</div>
@@ -72,7 +76,7 @@
 													</div>
 												</div>
 											</div>
-										</div>
+										</wrap-owlcarousel>
 									</div>
 								</div>
 							</div>
@@ -93,11 +97,11 @@
 										<div class="pr-img-area">
 											<a title="" href="">
 												<figure>
-													<img class="first-img" src="{{hotDealList[0].images[0]}}" alt="">
-													<img class="hover-img" src="{{hotDealList[0].images[1]}}" alt="">
+													<img class="first-img" data-ng-src="{{hotestDeal.images[0]}}" alt="">
+													<img class="hover-img" data-ng-src="{{hotestDeal.images[1]}}" alt="">
 												</figure>
 											</a>
-											<button type="button" class="add-to-cart-mt">
+											<button type="button" class="add-to-cart-mt" data-ng-click="addToCartHotestDeal(hotestDeal)">
 												<i class="fa fa-shopping-cart"></i><span> Add to Cart</span>
 											</button>
 										</div>
@@ -111,12 +115,7 @@
 														<i class="fa fa-heart"></i>
 													</a>
 												</div>
-												<div class="mt-button add_to_compare">
-													<a href="">
-														<i class="fa fa-signal"></i>
-													</a>
-												</div>
-												<div class="mt-button quick-view">
+												<div class="mt-button quick-view" data-ng-click="openQuickView(hotestDeal);">
 													<a href="">
 														<i class="fa fa-search"></i>
 													</a>
@@ -127,7 +126,7 @@
 									<div class="item-info">
 										<div class="info-inner">
 											<div class="item-title">
-												<a title="" href="">{{hotDealList[0].productName}}</a>
+												<a title="" href="">{{hotestDeal.productName}}</a>
 											</div>
 											<div class="item-content">
 												<div class="rating">
@@ -140,7 +139,7 @@
 												<div class="item-price">
 													<div class="price-box">
 														<span class="regular-price">
-															<span class="price">&#8377; {{hotDealList[0].price}}</span>
+															<span class="price">&#8377; {{hotestDeal.discPrice}}</span>
 														</span>
 													</div>
 												</div>
@@ -164,28 +163,28 @@
 		<div class="row">
 			<div class="col-sm-4 col-sms-12">
 				<div class="banner-box banner-box2">
-					<a href=""><img src="./assets/images/banner_staic2.png" alt=""></a>
+					<a href=""><img src="http://htmlmystore.justthemevalley.com/organic/version2/images/blog-img1.jpg" alt=""></a>
 					<div class="box-hover">
-						<div class="banner-title">Fresh Strawberry</div>
+						<div class="banner-title">Casual Summer</div>
 						<span>Save up to 55% off</span>
 					</div>
 				</div>
 			</div>
 			<div class="col-sm-4 col-sms-12">
 				<div class="banner-box banner-box1">
-					<a href=""><img src="./assets/images/banner_staic1.png" alt=""></a>
+					<a href=""><img src="http://htmlmystore.justthemevalley.com/organic/version2/images/blog-img2.jpg" alt=""></a>
 					<div class="box-hover">
-						<div class="banner-title">Healthy Summer</div>
+						<div class="banner-title">Party Wear</div>
 						<span>Save up to 45% off</span>
 					</div>
 				</div>
 			</div>
 			<div class="col-sm-4 col-sms-12">
 				<div class="banner-box banner-box3">
-					<a href=""><img src="./assets/images/banner_staic3.png" alt=""></a>
+					<a href=""><img src="http://htmlmystore.justthemevalley.com/organic/version2/images/blog-img3.jpg" alt=""></a>
 					<div class="box-hover">
-						<div class="banner-title">Fresh Salads</div>
-						<span>Welcome to Foodstore!</span>
+						<div class="banner-title">Rainy Season</div>
+						<span>Welcome to store!</span>
 					</div>
 				</div>
 			</div>
@@ -195,28 +194,27 @@
 
 <!--special-products-->
 <div class="container">
-	<div class="special-products">
+	<div class="special-products" data-ng-init="getSpecialList();">
 		<div class="page-header">
-			<h2>Special Products</h2>
+			<h2>Special Sale</h2>
 		</div>
 		<div class="special-products-pro">
 			<div class="slider-items-products">
-				<div id="special-products-slider"
-					class="product-flexslider hidden-buttons">
-					<div class="slider-items slider-width-col4">
-						<div class="product-item">
+				<div id="special-products-slider" class="product-flexslider hidden-buttons">
+					<wrap-owlcarousel class="slider-items slider-width-col4" data-options="{items: 4,itemsDesktop: [1024, 4],itemsDesktopSmall: [900, 3]}">
+						<div class="product-item" owl-carousel-item="" data-ng-repeat="specialProduct in specialProducts">
 							<div class="item-inner">
 								<div class="product-thumbnail">
-									<div class="icon-sale-label sale-left">Sale</div>
-									<div class="icon-new-label new-right">New</div>
+									<!-- <div class="icon-sale-label sale-left">Sale</div>
+									<div class="icon-new-label new-right">New</div> -->
 									<div class="pr-img-area">
-										<a title="" href="">
+										<a>
 											<figure>
-												<img class="first-img" src="https://haldwanigrocers.com/media/catalog/product/cache/4/image/430x389.100257069/85e4522595efc69f496374d01ef2bf13/a/p/apple.png" alt="">
-												<img class="hover-img" src="https://haldwanigrocers.com/media/catalog/product/cache/4/image/430x389.100257069/85e4522595efc69f496374d01ef2bf13/a/p/apple.png" alt="">
+												<img class="first-img" data-ng-src="{{specialProduct.images[0]}}" alt="">
+												<img class="hover-img" data-ng-src="{{specialProduct.images[1]}}" alt="">
 											</figure>
 										</a>
-										<button type="button" class="add-to-cart-mt">
+										<button type="button" class="add-to-cart-mt" data-ng-click="addToCartHotestDeal(specialProduct)">
 											<i class="fa fa-shopping-cart"></i><span> Add to Cart</span>
 										</button>
 									</div>
@@ -227,12 +225,7 @@
 													<i class="fa fa-heart"></i>
 												</a>
 											</div>
-											<div class="mt-button add_to_compare">
-												<a href="">
-													<i class="fa fa-signal"></i>
-												</a>
-											</div>
-											<div class="mt-button quick-view">
+											<div class="mt-button quick-view" data-ng-click="openQuickView(specialProduct);">
 												<a href="">
 													<i class="fa fa-search"></i>
 												</a>
@@ -243,7 +236,7 @@
 								<div class="item-info">
 									<div class="info-inner">
 										<div class="item-title">
-											<a title="" href="">Kashmiri Apples</a>
+											<a title="" href="">{{specialProduct.productName}}</a>
 										</div>
 										<div class="item-content">
 											<div class="rating">
@@ -256,7 +249,7 @@
 											<div class="item-price">
 												<div class="price-box">
 													<span class="regular-price">
-														<span class="price">325.00 /KG</span>
+														<span class="price">&#8377; {{specialProduct.discPrice}}</span>
 													</span>
 												</div>
 											</div>
@@ -265,7 +258,7 @@
 								</div>
 							</div>
 						</div>
-					</div>
+					</wrap-owlcarousel>
 				</div>
 			</div>
 		</div>
@@ -314,40 +307,3 @@
 		</div>
 	</div>
 </div>
-
-<script>
-
-/******************************************
-***************Featured slider*************
-******************************************/
-$(window).load(function() {
-	$("#featured-slider .slider-items").owlCarousel({
-		items: 3,
-		itemsDesktop: [1024, 3],
-		itemsDesktopSmall: [900, 2],
-		itemsTablet: [640, 2],
-		itemsMobile: [390, 1],
-		navigation: !0,
-		navigationText: ['<a class="flex-prev"></a>', '<a class="flex-next"></a>'],
-		slideSpeed: 500,
-		pagination: !1,
-		autoPlay: false
-	});
-});
-</script>
-<script>
-$(window).load(function() {
-	$("#special-products-slider .slider-items").owlCarousel({
-		items: 4,
-		itemsDesktop: [1024, 4],
-		itemsDesktopSmall: [900, 3],
-		itemsTablet: [640, 2],
-		itemsMobile: [390, 1],
-		navigation: !0,
-		navigationText: ['<a class="flex-prev"></a>', '<a class="flex-next"></a>'],
-		slideSpeed: 500,
-		pagination: !1,
-		autoPlay: false
-	});
-});
-</script>

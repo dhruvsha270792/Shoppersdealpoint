@@ -1,12 +1,24 @@
 angular.module('shoppersApp')
-.run(['$rootScope', '$state',function($rootScope, $state) {
+.run(['$rootScope', '$state', 'sessionService',function($rootScope, $state, sessionService) {
 	$rootScope.$state = $state;
+	$rootScope.cartList = {};
+	$rootScope.cartList.subtotal = 0;
+	$rootScope.cartList.size = 0;
 	
 	$rootScope.$on('$stateChangeSuccess', function(evt, toState, fromState, params) {
 		window.onload = loadAutoScroll;
 		window.onscroll = scrollAutoScroll;
+		
+		if(sessionService.get('cart') != null) {
+			$rootScope.cartList.data = JSON.parse(sessionService.get('cart'));
+			$rootScope.cartList.size = $rootScope.cartList.data.length;
+			$rootScope.cartList.data.map(function(d) {
+				$rootScope.cartList.subtotal += d['price'].valueOf();
+			});
+		}
+		
 		if(toState.redirectTo) {
-	        evt.preventDefault();
+			evt.preventDefault();
 	        $state.go(toState.redirectTo, params, {location: 'replace'});
 	    }
 	});
@@ -24,15 +36,34 @@ angular.module('shoppersApp')
 	
 	.state("logout",{
 		url: "/logout",
-	})
+	})*/
 	
 	.state("account",{			//Will be used for MyAccount in header //If login go to profile if not go to account.html
 		url: "/account",
-	})*/
+		templateUrl: "view/accountPage.html"
+	})
 	
 	.state("home",{
 		url: "/",
 		templateUrl: "view/mainPage.html",
+		controller: "mainController"
+	})
+	
+	.state("shop",{
+		url: "/shop/:categoryName/:subcategoryName/:productId",
+		templateUrl: "view/shopPage.html",
+		controller: "shopController"
+	})
+	
+	.state("hotdeals",{
+		url: "/hotdeals/",
+		templateUrl: "view/dealPage.html",
+		controller: "dealController"
+	})
+	
+	.state("special",{
+		url: "/special/",
+		templateUrl: "view/specialPage.html",
 		controller: "mainController"
 	})
 			

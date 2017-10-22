@@ -77,9 +77,9 @@ public class ProductController {
 		return JsonUtils.errorResponse("no data found").toString();
 	}
 	
-	@RequestMapping(value = "topRated")
+	@RequestMapping(value = "special")
 	@ResponseBody
-	public String getTopRatedList(
+	public String getSpecialProductList(
 			@RequestParam(defaultValue = "10") int n,
 			@RequestParam(defaultValue = "0") int pos,
 			@RequestParam(required=false) String categoryName,
@@ -90,7 +90,7 @@ public class ProductController {
 			) {
 		try {
 			int total = 10;
-			JsonArray topRatedList = productService.getTopRatedList(n, pos, categoryName, subcategoryName, apexId, sortField, sortType);
+			JsonArray topRatedList = productService.getSpecialProductList(n, pos, categoryName, subcategoryName, apexId, sortField, sortType);
 			return JsonUtils.createPaginatedResponse(topRatedList, total, pos).toString();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);

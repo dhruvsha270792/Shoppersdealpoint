@@ -1,0 +1,250 @@
+<!-- Breadcrumbs -->
+<div class="breadcrumbs">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<ul>
+					<li class="home">
+						<a ui-sref="home">Home</a>
+						<span>&raquo;</span>
+					</li>
+					<li>
+						<a>
+							<strong> Shop</strong>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Breadcrumbs End -->
+
+<!-- Main Container -->
+<div class="main-container col2-left-layout" data-ng-init="getShopPageList();">
+	<div class="container">
+		<div class="row">
+			<div class="col-main col-sm-9 col-xs-12 col-sm-push-3">
+				<div class="shop-inner">
+					<div class="toolbar">
+						<div class="sorter">
+							<div class="short-by">
+								<label>Sort By:</label>
+								<select>
+									<option selected="selected">New & Popular</option>
+									<option>Price: Low to High</option>
+									<option>Price: High to Low</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="product-grid-area">
+						<ul class="products-grid">
+							<li class="item col-lg-4 col-md-4 col-sm-6 col-xs-6" data-ng-repeat="shop in shopPageList">
+								<div class="product-item">
+									<div class="item-inner">
+										<div class="product-thumbnail">
+											<div class="pr-img-area">
+												<a href="">
+													<figure>
+														<img class="first-img" data-ng-src="{{shop.images[0]}}">
+														<img class="hover-img" data-ng-src="{{shop.images[1]}}">
+													</figure>
+												</a>
+												<button type="button" class="add-to-cart-mt" data-ng-click="addToCartShop(shop);">
+													<i class="fa fa-shopping-cart"></i><span> Add to Cart</span>
+												</button>
+											</div>
+											<div class="pr-info-area">
+												<div class="pr-button">
+													<div class="mt-button add_to_wishlist">
+														<a>
+															<i class="fa fa-heart"></i>
+														</a>
+													</div>
+													<div class="mt-button quick-view" data-ng-click="openQuickView(shop);">
+														<a>
+															<i class="fa fa-search"></i>
+														</a>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="item-info">
+											<div class="info-inner">
+												<div class="item-title">
+													<a href="single_product.html">{{shop.productName}}</a>
+												</div>
+												<div class="item-content">
+													<div class="rating">
+														<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
+															class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i
+															class="fa fa-star-o"></i>
+													</div>
+													<div class="item-price">
+														<div class="price-box">
+															<span class="regular-price">
+															<span class="price">&#8377; {{shop.discPrice}}</span>
+															</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div class="pagination-area ">
+						<ul>
+							<li><a class="active" href="#">1</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<aside class="sidebar col-sm-3 col-xs-12 col-sm-pull-9">
+				<div class="block shop-by-side">
+					<div class="sidebar-bar-title">
+						<h3>Shop By</h3>
+					</div>
+					<div class="block-content">
+						<div class="manufacturer-area">
+							<h2 class="saider-bar-title">Manufacturer</h2>
+							<div class="saide-bar-menu">
+								<ul>
+									<li><a href=""><i class="fa fa-angle-right"></i> Adidas </a></li>
+									<li><a href=""><i class="fa fa-angle-right"></i> Asics </a></li>
+									<li><a href=""><i class="fa fa-angle-right"></i> Nike </a></li>
+									<li><a href=""><i class="fa fa-angle-right"></i> New Balance </a></li>
+									<li><a href=""><i class="fa fa-angle-right"></i> Puma </a></li>
+									<li><a href=""><i class="fa fa-angle-right"></i> Reebok </a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="color-area">
+							<h2 class="saider-bar-title">Color</h2>
+							<div class="color">
+								<ul>
+									<li><a href="#"></a></li>
+									<li><a href="#"></a></li>
+									<li><a href="#"></a></li>
+									<li><a href="#"></a></li>
+									<li><a href="#"></a></li>
+									<li><a href="#"></a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="size-area">
+							<h2 class="saider-bar-title">Size</h2>
+							<div class="size">
+								<ul>
+									<li><a href="#">S</a></li>
+									<li><a href="#">L</a></li>
+									<li><a href="#">M</a></li>
+									<li><a href="#">XL</a></li>
+									<li><a href="#">XXL</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="block product-price-range ">
+					<div class="sidebar-bar-title">
+						<h3>Price</h3>
+					</div>
+					<div class="block-content">
+						<div class="slider-range">
+							<div
+								data-label-reasult="Range:"
+								data-min="0"
+								data-max="5200"
+								data-unit=" &#8377; "
+								class="slider-range-price"
+								data-value-min="600"
+								data-value-max="4000" price-filter>
+							</div>
+							<div class="amount-range-price">Range: &#8377; 600 - &#8377; 4000</div>
+							<ul class="check-box-list">
+								<li>
+									<input type="checkbox" id="p1" name="cc" />
+									<label>
+										<span class="button"></span> 600 - 1000
+									</label>
+								</li>
+								<li>
+									<input type="checkbox" id="p2" name="cc" />
+									<label>
+										<span class="button"></span> 1000 - 2000
+									</label>
+								</li>
+								<li>
+									<input type="checkbox" id="p3" name="cc" />
+									<label>
+										<span class="button"></span> Above 2000
+									</label>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="block sidebar-cart">
+					<div class="sidebar-bar-title">
+						<h3>My Cart</h3>
+					</div>
+					<div class="block-content">
+						<p class="amount">
+							There are <a href="shopping_cart.html">2 items</a> in your cart.
+						</p>
+						<ul>
+							<li class="item">
+								<a href="shopping_cart.html" title="Sample Product" class="product-image">
+									<img src="images/products/img01.jpg" alt="Sample Product ">
+								</a>
+								<div class="product-details">
+									<div class="access">
+										<a href="#" title="Remove This Item" class="remove-cart">
+											<i class="icon-close"></i>
+										</a>
+									</div>
+									<p class="product-name">
+										<a href="shopping_cart.html">Lorem ipsum dolor sit amet Consectetur</a>
+									</p>
+									<strong>1</strong> x <span class="price">$19.99</span>
+								</div>
+							</li>
+							<li class="item last">
+								<a href="#" title="Sample Product" class="product-image">
+									<img src="images/products/img01.jpg" alt="Sample Product">
+								</a>
+								<div class="product-details">
+									<div class="access">
+										<a href="#" title="Remove This Item" class="remove-cart">
+											<i class="icon-close"></i>
+										</a>
+									</div>
+									<p class="product-name">
+										<a href="shopping_cart.html">Consectetur utes anet adipisicing elit</a>
+									</p>
+									<strong>1</strong> x <span class="price">$8.00</span> access clearfix
+								</div>
+							</li>
+						</ul>
+						<div class="summary">
+							<p class="subtotal">
+								<span class="label">Cart Subtotal:</span> <span class="price">$27.99</span>
+							</p>
+						</div>
+						<div class="cart-checkout">
+							<button class="button button-checkout" title="Submit" type="submit">
+								<i class="fa fa-check"></i>
+								<span>Checkout</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</aside>
+		</div>
+	</div>
+</div>
+<!-- Main Container End -->

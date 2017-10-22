@@ -4,12 +4,22 @@ angular.module('shoppersApp').factory('mainService', [ '$http', function($http) 
 			return $http.get('./p/menu/list');
 		},
 		
-		getHotDealList : function() {
-			return $http.get('./p/hotdeals');
+		getShopDeals : function(criteria) {
+			if(criteria == undefined)
+				criteria='';
+			return $http.get('./p/shop'+criteria);
 		},
 		
-		getTopRatedList : function() {
-			return $http.get('./p/topRated');
+		getHotDealList : function(criteria) {
+			if(criteria == undefined)
+				criteria='';
+			return $http.get('./p/hotdeals'+criteria);
+		},
+		
+		getSpecialList : function(criteria) {
+			if(criteria == undefined)
+				criteria='';
+			return $http.get('./p/special'+criteria);
 		},
 	}
 }]);

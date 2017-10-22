@@ -38,14 +38,14 @@
 	background: #fff;
 }
 #quick_view_popup-close {
-	cursor: pointer;
-	display: none;
-	position: absolute;
-	right: -6px;
-	top: -6px;
-	z-index: 1103;
-	font-size: 25px;
 	color: #e84c3d;
+    cursor: pointer;
+    display: none;
+    font-size: 25px;
+    position: absolute;
+    right: 269px;
+    top: -7px;
+    z-index: 1103;
 }
 #quick_view_popup-content .product-view-area .product-name h1 {
 	font-size: 22px;

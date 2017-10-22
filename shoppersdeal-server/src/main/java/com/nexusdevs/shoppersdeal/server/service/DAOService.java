@@ -480,10 +480,10 @@ public class DAOService {
 	}
 	
 	//get top rated list
-	public List<Products> getTopRatedList(int n, int pos, String categoryName, String subcategoryName, String productId, String sF, String sT) {
+	public List<Products> getSpecialProductList(int n, int pos, String categoryName, String subcategoryName, String productId, String sF, String sT) {
 		BasicDBObject queryParams = new BasicDBObject();
 		queryParams.put("deleted", false);
-		queryParams.put("dealCategory", "topRated");
+		queryParams.put("dealCategory", "special");
 		
 		Category category = getCategoryByName(categoryName);
 		if(category != null) {

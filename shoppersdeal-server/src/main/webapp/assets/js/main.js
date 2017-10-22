@@ -17,61 +17,6 @@ jQuery(document).ready(function() {
 
 
 /******************************************
-   Featured slider
-******************************************/
-
-jQuery("#featured-slider .slider-items").owlCarousel({
-		items: 3,
-		itemsDesktop: [1024, 3],
-		itemsDesktopSmall: [900, 2],
-		itemsTablet: [640, 2],
-		itemsMobile: [390, 1],
-		navigation: !0,
-		navigationText: ['<a class="flex-prev"></a>', '<a class="flex-next"></a>'],
-		slideSpeed: 500,
-		pagination: !1,
-		autoPlay: false
-	}),
-
-
-/******************************************
-	Top sellers slider
-******************************************/
-
-	jQuery("#top-sellers-slider .slider-items").owlCarousel({
-		items: 3,
-		itemsDesktop: [1024, 3],
-		itemsDesktopSmall: [900, 2],
-		itemsTablet: [640, 2],
-		itemsMobile: [390, 1],
-		navigation: !0,
-		navigationText: ['<a class="flex-prev"></a>', '<a class="flex-next"></a>'],
-		slideSpeed: 500,
-		pagination: !1,
-		autoPlay: true
-	}),
-
-/******************************************
-	Special products slider
-******************************************/
-
-	jQuery("#special-products-slider .slider-items").owlCarousel({
-		items: 4,
-		itemsDesktop: [1024, 4],
-		itemsDesktopSmall: [900, 3],
-		itemsTablet: [640, 2],
-		itemsMobile: [390, 1],
-		navigation: !0,
-		navigationText: ['<a class="flex-prev"></a>', '<a class="flex-next"></a>'],
-		slideSpeed: 500,
-		pagination: !1,
-		autoPlay: false
-	}),
-
-
-
-
-/******************************************
 	Our clients slider
 ******************************************/
 
@@ -104,56 +49,6 @@ jQuery("#featured-slider .slider-items").owlCarousel({
 		slideSpeed: 500,
 		pagination: !1
 	}),
-
-
-/******************************************
-	Mobile menu
-******************************************
-
-	$("#mobile-menu").mobileMenu({
-		MenuWidth: 250,
-		SlideSpeed: 300,
-		WindowsMaxWidth: 767,
-		PagePush: !0,
-		FromLeft: !0,
-		Overlay: !0,
-		CollapseMenu: !0,
-		ClassName: "mobile-menu"
-
-	}),
-
-/******************************************
-	Mega Menu
-******************************************
-
-jQuery('.mega-menu-title').on('click', function() {
-	if (jQuery('.mega-menu-category').is(':visible')) {
-		jQuery('.mega-menu-category').slideUp();
-	} else {
-		jQuery('.mega-menu-category').slideDown();
-	}
-});
-
-
-jQuery('.mega-menu-category .nav > li').hover(function() {
-	jQuery(this).addClass("active");
-	jQuery(this).find('.popup').stop(true, true).fadeIn('slow');
-}, function() {
-	jQuery(this).removeClass("active");
-	jQuery(this).find('.popup').stop(true, true).fadeOut('slow');
-});
-
-
-jQuery('.mega-menu-category .nav > li.view-more').on('click', function(e) {
-	if (jQuery('.mega-menu-category .nav > li.more-menu').is(':visible')) {
-		jQuery('.mega-menu-category .nav > li.more-menu').stop().slideUp();
-		jQuery(this).find('a').text('More category');
-	} else {
-		jQuery('.mega-menu-category .nav > li.more-menu').stop().slideDown();
-		jQuery(this).find('a').text('Close menu');
-	}
-	e.preventDefault();
-});
 
 /******************************************
    Category desc slider
@@ -262,7 +157,7 @@ if (jQuery('#home-testimonials-slider').length) {
     PRICE FILTER
 ******************************************/
 
-jQuery('.slider-range-price').each(function() {
+/*$('.slider-range-price').each(function() {
 	var min = jQuery(this).data('min');
 	var max = jQuery(this).data('max');
 	var unit = jQuery(this).data('unit');
@@ -281,7 +176,7 @@ jQuery('.slider-range-price').each(function() {
 			t.closest('.slider-range').find('.amount-range-price').html(result);
 		}
 	});
-})
+})*/
 
 /******************************************
     Footer expander

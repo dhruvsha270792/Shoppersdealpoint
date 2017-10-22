@@ -1393,6 +1393,8 @@ ul#cart-sidebar {
 	padding-bottom:0px;
 	max-height: 100%;
 	min-height: 100%;
+	max-width: 100%;
+    min-width: 100%;
 }
 .hot-deal .products-grid .item {
 	margin-bottom: 25px;
@@ -1842,6 +1844,8 @@ ul#cart-sidebar {
 	position: relative;
 	max-height: 321px;
 	min-height: 321px;
+	min-width: 251px;
+    max-width: 251px;
 }
 .hover-img {
 	left: 0;
@@ -1925,7 +1929,7 @@ ul#cart-sidebar {
 }
 .pr-button {
 	border: 0 none;
-	left: 50%;
+	left: 60%;
 	margin-left: -66px;
 	position: absolute;
 	top: 30%;
@@ -5656,7 +5660,35 @@ ul.products-list {
 	position: relative;
 	overflow: hidden;
 	padding: 0px;
+	max-height: 340px;
+    min-height: 340px;
 }
+
+a[ ng-click ] {
+    color: #337ab7;
+    cursor: pointer ;
+}
+
+a[ ng-click ]:hover{
+    color: #23527c;
+    cursor: pointer ;
+}
+
+div.m-modals {
+    background-color: rgba( 0, 0, 0, 0.8 ) ;
+    bottom: 0px ;
+    left: 0px ;
+    position: fixed;
+    right: 0px ;
+    top: 0px ;
+    z-index: 99999999;
+}
+
+div.m-modals.ng-hide {
+    background-color: rgba( 0, 0, 0, 0 );
+}
+
+
 @media (max-width:480px) {
 .product-big-image {
 	border-right: none
@@ -5671,11 +5703,13 @@ ul.products-list {
 	margin: auto;
 	position: relative;
 	z-index: 0;
-	margin: 0px 15px 10px;
+	margin: 75px 150px 20px;
 	background: #fff;
 	border: 1px #e6e6e6 solid;
 	display: inline-block;
 	padding: 22px 22px 0px;
+	max-height: 510px;
+    min-height: 510px;
 }
 @media (max-width:480px) {
 .product-view-area {
